@@ -12,8 +12,16 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { APIDREAMBOX } from "../library/APIs";
+import { createStackNavigator } from 'react-navigation';
+import HomeScreen from "./HomeScreen";
 
-export default class Login extends Component {
+export default class LoginScreen extends Component {
+  // dipake biar kebaca di stack navigator 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLayoutPreset: "center"
+    };
+  };
 
   constructor(props) {
     super(props);
@@ -32,16 +40,16 @@ export default class Login extends Component {
     APIDREAMBOX().postLogin(this.state.email, this.state.password).then(response => {
       const responseJSON = response.data
       console.log(responseJSON)
-      // if(responseJSON.code != '200'){
-      //   alert("Username Atau Password Salah")
-      //   return;
-      // } 
+      if(responseJSON.status != 'SUCCESS'){
+        alert("Username Atau Password Salah")
+        return;
+      } 
 
-      // alert("Mantap!")
+      alert("Mantap!")
     })
   }
 
-  render() {
+  render() {    
     return (
       <View style={styles.container}>
         <Image
@@ -69,9 +77,10 @@ export default class Login extends Component {
           />
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}>
+        {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}> */}
+        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} >
           <Text style={styles.loginText}>Login</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('button works')}>
           <Text>Forgot your password?</Text>
@@ -85,12 +94,13 @@ export default class Login extends Component {
   }
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#DCDCDC',
   },
   bgImage: {
     flex: 1,
