@@ -1,8 +1,14 @@
 import React from "react";
 import { createDrawerNavigator, createAppContainer } from "react-navigation";
 import BottomTabNavigator from "./bottom-tab-navigator";
-import { SettingsNavigator } from "./screen-stack-navigators";
-import LoginScreen from '../../src/screens/LoginScreen'
+import { 
+  SettingsNavigator, 
+  InputDreamboxNav, 
+  ListDreamboxNav, 
+  CancelDreamboxNav, 
+  AboutScreenNav } 
+from "./screen-stack-navigators";
+import LoginScreen from '../../src/screens/LoginScreen';
 
 // Data yang ditulis untuk sidebar ada dimari, kaya setting, dsb
 const DrawerNavigator = createDrawerNavigator({
@@ -11,7 +17,11 @@ const DrawerNavigator = createDrawerNavigator({
         See 'screen-stack-navigator' file*/
   Login: LoginScreen,
   Home: BottomTabNavigator,
-  Settings: SettingsNavigator
+  Settings: SettingsNavigator,
+  List: ListDreamboxNav,
+  Input: InputDreamboxNav,
+  Cancel: CancelDreamboxNav,
+  About: AboutScreenNav,
 });
 
 const Drawer = createAppContainer(DrawerNavigator);

@@ -19,8 +19,18 @@ export const APIDREAMBOX = () => {
     return API.post('/auth/login', formData);
   }
 
+  const postInputData = (cif, id, dana, target) => {
+    let formData = new FormData();
+    formData.append('cif', cif);
+    formData.append('id_kategori', id);
+    formData.append('dana', dana);
+    formData.append('target', target);
+    return API.post('/dreambox/create', formData);
+  }
+
   return {
-    postLogin
+    postLogin,
+    postInputData
   }
 
 }
