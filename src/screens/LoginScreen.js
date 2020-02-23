@@ -45,7 +45,7 @@ export default class LoginScreen extends Component {
         return;
       } 
 
-      alert("Mantap!")
+      this.props.navigation.navigate('Home');
     })
   }
 

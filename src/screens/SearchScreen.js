@@ -14,7 +14,7 @@ export default class SearchScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Hello! Welcome to my search page</Text>
+        <Text>Anda Tidak Memiliki Notifikasi</Text>
       </View>
     );
   }
