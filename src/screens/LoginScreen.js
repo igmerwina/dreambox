@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { APIDREAMBOX } from "../library/APIs";
 import { createStackNavigator } from 'react-navigation';
 import HomeScreen from "./HomeScreen";
+import axios from "axios";
 
 export default class LoginScreen extends Component {
   // dipake biar kebaca di stack navigator 
@@ -37,19 +38,26 @@ export default class LoginScreen extends Component {
       return;
     }
 
-    APIDREAMBOX().postLogin(this.state.email, this.state.password).then(response => {
-      const responseJSON = response.data
-      console.log(responseJSON)
-      if(responseJSON.status != 'SUCCESS'){
-        alert("Username Atau Password Salah")
-        return;
-      } 
+    const param = {
+      email: this.state.email,
+      password: this.state.password
+    };
 
-      this.props.navigation.navigate('Home');
-    })
+    axios.post('http://mydreambox.herokuapp.com/auth/login', param)
+      .then((res) => {
+        if (res.data.data != null) {
+          console.log(res.data)
+          this.props.navigation.navigate('Home')
+          return;
+        }
+        console.log(res.data)
+        alert('Not OK')
+      }).catch((error) => {
+        console.log(error)
+      });
   }
 
-  render() {    
+  render() {
     return (
       <View style={styles.container}>
         <Image
@@ -77,8 +85,8 @@ export default class LoginScreen extends Component {
           />
         </View>
 
-        {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}> */}
-        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} >
+        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}>
+          {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} > */}
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
