@@ -35,7 +35,7 @@ export default class InputDreambox extends Component {
     super(props);
 
     this.state = {
-      cif: '1278756',
+      cif: '1011822505',
       idKat: 'CA001',
       nominal: '',
       targetTercapai: '2025-10-10',
@@ -75,15 +75,14 @@ export default class InputDreambox extends Component {
     axios.post('http://mydreambox.herokuapp.com/dreambox/create', param)
       .then((res) => {
         const responseJSON = res.data
-        if (responseJSON.data != null) {
+        if (responseJSON.status != "SUCCESS") {
           this.setState({ loading: false })
-          alert("Sukses")
-          console.log("Sukses \n" + responseJSON.data)
+          console.log(res.data)
+          alert('Data yang anda masukan salah')
           return;
         }
         this.setState({ loading: false })
-        console.log(res.data)
-        console.log('Not OK')
+        this.props.navigation.navigate('List');
       }).catch((error) => {
         this.setState({ loading: false })
         console.log(error)
