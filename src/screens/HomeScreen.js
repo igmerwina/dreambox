@@ -24,10 +24,10 @@ export default class Home extends Component {
     super(props);
     this.state = {
       data: [
-        {id:1,  title: "Profile",       color:"#65A898", image:"https://img.icons8.com/color/70/000000/name.png"},
-        {id:2,  title: "Dreamboxku",    color:"#65A898", image:"https://img.icons8.com/office/70/000000/home-page.png"},
-        {id:3,  title: "Tambah Impian", color:"#65A898", image:"https://img.icons8.com/color/70/000000/classroom.png"},
-        {id:3,  title: "History",       color:"#65A898", image:"https://img.icons8.com/dusk/70/000000/checklist.png"},
+        {link:"Profile",    title: "Profile",       color:"#65A898", image:"https://img.icons8.com/color/70/000000/name.png"},
+        {link:"List",       title: "Dreamboxku",    color:"#65A898", image:"https://img.icons8.com/office/70/000000/home-page.png"},
+        {link:"Input",      title: "Tambah Impian", color:"#65A898", image:"https://img.icons8.com/color/70/000000/classroom.png"},
+        {link:"Simulasi",   title: "Simulasi",       color:"#65A898", image:"https://img.icons8.com/dusk/70/000000/checklist.png"},
       ]
     };
   }
@@ -47,8 +47,7 @@ export default class Home extends Component {
           renderItem={({item}) => {
             return (
               <View>
-                {/* <TouchableOpacity style={[styles.card, {backgroundColor:item.color}]} onPress={() => {this.clickEventListener(item)}}> */}
-                <TouchableOpacity style={[styles.card, {backgroundColor:item.color}]} onPress={() => {this.props.navigation.navigate('Input')}}>
+                <TouchableOpacity style={[styles.card, {backgroundColor:item.color}]} onPress={() => {this.props.navigation.navigate(item.link)}}>
                   <Image style={styles.cardImage} source={{uri:item.image}}/>
                 </TouchableOpacity>
 
