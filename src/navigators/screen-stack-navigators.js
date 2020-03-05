@@ -8,6 +8,8 @@ import AboutScreen from "../screens/AboutScreen";
 import ListDreambox from "../screens/ListDreambox";
 import InputDreambox from "../screens/InputDreambox";
 import CancelDreambox from "../screens/CancelDreambox";
+import DetailDreambox from "../screens/DetailDreambox";
+import SimulasiScreen from "../screens/SimulasiScreen";
 
 //Add navigators with screens in this file
 export const HomeNavigator = createStackNavigator({
@@ -40,4 +42,12 @@ export const CancelDreamboxNav = createStackNavigator({
 
 export const AboutScreenNav = createStackNavigator({
   About: { screen: AboutScreen }
+})
+
+export const DetailDreamboxNav = createStackNavigator({
+  Detail: { screen: DetailDreambox }
+})
+
+export const SimulasiNav = createStackNavigator({
+  Simulasi : { screen: SimulasiScreen }
 })

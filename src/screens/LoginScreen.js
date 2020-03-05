@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { APIDREAMBOX } from "../library/APIs";
+import { Spinner } from 'native-base';
 import { createStackNavigator } from 'react-navigation';
 import HomeScreen from "./HomeScreen";
 import axios from "axios";
@@ -29,10 +30,13 @@ export default class LoginScreen extends Component {
     this.state = {
       email: '',
       password: '',
+      visible: false
     }
   }
 
   _submit = () => {
+    this.setState({ visible: true })
+
     if (this.state.email === '' && this.state.password === '') {
       Alert.alert("Info", "Data Tidak Boleh Kosong");
       return;
@@ -45,6 +49,7 @@ export default class LoginScreen extends Component {
 
     axios.post('http://mydreambox.herokuapp.com/auth/login', param)
       .then((res) => {
+        this.setState({ visible: true })
         if (res.data.data != null) {
           console.log(res.data)
           this.props.navigation.navigate('Home')
@@ -60,6 +65,7 @@ export default class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        {this.state.loading && (<Spinner color="green" />)}
         <Image
           style={styles.bgImage}
           source={{ uri: 'http://cdn.backgroundhost.com/backgrounds/subtlepatterns/gplaypattern.png' }}
@@ -85,8 +91,8 @@ export default class LoginScreen extends Component {
           />
         </View>
 
-        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}>
-          {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} > */}
+        {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}> */}
+        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Simulasi')} >
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
@@ -101,8 +107,6 @@ export default class LoginScreen extends Component {
     );
   }
 }
-
-
 
 const styles = StyleSheet.create({
   container: {

@@ -6,7 +6,9 @@ import {
   InputDreamboxNav, 
   ListDreamboxNav, 
   CancelDreamboxNav, 
-  AboutScreenNav } 
+  AboutScreenNav, 
+  SimulasiNav
+} 
 from "./screen-stack-navigators";
 import LoginScreen from '../../src/screens/LoginScreen';
 
@@ -22,6 +24,7 @@ const DrawerNavigator = createDrawerNavigator({
   Input: InputDreamboxNav,
   Cancel: CancelDreamboxNav,
   About: AboutScreenNav,
+  Simulasi: SimulasiNav
 });
 
 const Drawer = createAppContainer(DrawerNavigator);

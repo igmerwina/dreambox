@@ -11,7 +11,7 @@ import { MenuButton, Logo } from "../components/header/header";
 export default class Profile extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <MenuButton onPress={() => navigation.goBack(null)} />,
       headerTitle: <Logo />,
       headerBackTitle: "Profile",
       headerLayoutPreset: "center"
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 30,
   },
-  name: {
+  name: { 
     fontSize: 28,
     color: "#696969",
     fontWeight: "600"

@@ -12,11 +12,14 @@ import {
   Input,
   Button,
   DatePicker,
-  Picker
+  Picker,
+  Spinner
 } from 'native-base';
-import { StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import moment from 'moment';
 import Icon from "react-native-vector-icons/Ionicons";
+import { TextInputMask } from "react-native-masked-text";
+import { StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native';
 
 export default class InputDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -32,13 +35,19 @@ export default class InputDreambox extends Component {
     super(props);
 
     this.state = {
-      cif: 1278756,
-      idKat: 'CA002',
+      cif: '1278756',
+      idKat: 'CA001',
       nominal: '',
-      targetTercapai: '',
+      targetTercapai: '2025-10-10',
       konversiEmas: '',
-      selected2: undefined
+      // chosenDate: ''
+      loading: false
     };
+    // this.setDate = this.setDate.bind(this);
+  }
+
+  setDate(newDate) {
+    this.setState({ chosenDate: newDate });
   }
 
   onValueChange2(value: string) {
@@ -49,43 +58,51 @@ export default class InputDreambox extends Component {
 
   _submit = () => {
     console.log('INPUT DREAMBOX');
-    // if (this.state.nominal === '' && this.state.targetTercapai === '') {
-    //   Alert.alert("Info", "Data Tidak Boleh Kosong");
-    //   return;
-    // }
+    console.log("cif: " + this.state.cif)
+    console.log("id_kategori: " + this.state.idKat)
+    console.log("dana: " + this.state.nominal)
+    console.log("target: " + this.state.targetTercapai);
+
+    this.setState({ loading: true })
 
     const param = {
       cif: this.state.cif,
       id_kategori: this.state.idKat,
       dana: this.state.nominal,
-      target: this.state.tanggalTercapai
+      target: this.state.targetTercapai
     };
 
     axios.post('http://mydreambox.herokuapp.com/dreambox/create', param)
       .then((res) => {
         const responseJSON = res.data
         if (responseJSON.data != null) {
-          alert(responseJSON.data)
+          this.setState({ loading: false })
+          alert("Sukses")
+          console.log("Sukses \n" + responseJSON.data)
           return;
         }
+        this.setState({ loading: false })
         console.log(res.data)
-        alert('Not OK')
+        console.log('Not OK')
       }).catch((error) => {
+        this.setState({ loading: false })
         console.log(error)
       });
   }
 
   render() {
     const konvertEmas = this.state.nominal / 7600;
+
     return (
       <Container>
         <Content style={styles.container}>
+          {this.state.loading && (<Spinner color="green" />)}
           <Card>
             <CardItem header bordered>
-              <Text>Masukan Dream kamu</Text>
+              <Text style={styles.picker}>Masukan Dream kamu</Text>
             </CardItem>
             <Form>
-              <Item picker>
+              <Item picker style={styles.picker}>
                 <Picker
                   mode="dropdown"
                   iosIcon={<Icon name="arrow-down" />}
@@ -107,55 +124,46 @@ export default class InputDreambox extends Component {
                 <Label>Nominal</Label>
                 <Input
                   placeholder={"Rp"}
-                  onChangeText={this.state.nominal}
+                  onChangeText={(nominal) => this.setState({ nominal })}
                 />
               </Item>
               <Item stackedLabel>
                 <Label>Target Tercapai</Label>
                 <DatePicker
                   defaultDate={new Date().getDate()}
-                  minimumDate={new Date(2018, 1, 1)}
-                  maximumDate={new Date(2018, 12, 31)}
+                  minimumDate={new Date(2025, 1, 1)}
+                  maximumDate={new Date(3000, 12, 31)}
                   locale={"id"}
-                  timeZoneOffsetInMinutes={undefined}
                   modalTransparent={true}
-                  animationType={"fade"}
+                  animationType={"slide"}
                   androidMode={"default"}
-                  placeHolderText="Pilih Target Tercapai Dreambox Kamu"
-                  textStyle={{ color: "grey" }}
+                  placeHolderText="Pilih Target Dreambox Kamu"
+                  textStyle={{ color: "black" }}
                   placeHolderTextStyle={{ color: "#d3d3d3" }}
+                  formatChosenDate={date => { return moment(date).format('YYYY-MM-DD'); }}
                   onDateChange={this.setDate}
-                  disabled={false}
                 />
               </Item>
               <Item stackedLabel>
                 <Label>Konversi Emas</Label>
-                <Input
-                  placeholder={"0 gram"}
-                  onChangeText={konvertEmas}
-                  disabled={true}
-                />
+                <Text>2 Gram</Text>
               </Item>
             </Form>
           </Card>
-          <TouchableOpacity onPress={() => this._submit()}>
-            <Button block info style={styles.button} >
-              <Text style={styles.buttonText}>Simpan</Text>
-            </Button>
-          </TouchableOpacity>
-          {/* {
-            this.state.nominal && (
+          {
+            (this.state.nominal != '') && (
               <Card>
-                <CardItem>
-                  <Body>
-                    <Text>
-                      Wanjaiiii
+                <CardItem footer bordered>
+                  <Text style={styles.notification}>
+                    Saldo Kamu akan dipotong sebanyak 2 gram
                     </Text>
-                  </Body>
                 </CardItem>
               </Card>
             )
-          } */}
+          }
+          <Button block info style={styles.button} onPress={this._submit}>
+            <Text style={styles.buttonText}>Simpan</Text>
+          </Button>
         </Content>
       </Container>
     );
@@ -182,5 +190,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: 'bold'
+  },
+  picker: {
+    marginLeft: 20
+  },
+  notification: {
+    color: 'red'
   }
 })
