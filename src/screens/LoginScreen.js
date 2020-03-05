@@ -49,14 +49,14 @@ export default class LoginScreen extends Component {
 
     axios.post('http://mydreambox.herokuapp.com/auth/login', param)
       .then((res) => {
-        this.setState({ visible: true })
+        this.setState({ visible: false })
         if (res.data.data != null) {
           console.log(res.data)
           this.props.navigation.navigate('Home')
           return;
         }
         console.log(res.data)
-        alert('Not OK')
+        alert('Not OK');
       }).catch((error) => {
         console.log(error)
       });
@@ -65,7 +65,6 @@ export default class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.state.loading && (<Spinner color="green" />)}
         <Image
           style={styles.bgImage}
           source={{ uri: 'http://cdn.backgroundhost.com/backgrounds/subtlepatterns/gplaypattern.png' }}
@@ -73,6 +72,7 @@ export default class LoginScreen extends Component {
         <Image style={styles.imageContainer}
           source={require('./../assets/logo.png')}
         />
+        {this.state.visible && (<Spinner color="green" />)}
         <View style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Email"
@@ -91,8 +91,8 @@ export default class LoginScreen extends Component {
           />
         </View>
 
-        {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}> */}
-        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Simulasi')} >
+        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}>
+          {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Simulasi')} > */}
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
