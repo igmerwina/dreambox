@@ -52,7 +52,7 @@ export default class LoginScreen extends Component {
         this.setState({ visible: false })
         if (res.data.data != null) {
           console.log(res.data)
-          this.props.navigation.navigate('Home')
+          this.props.navigation.navigate('Input')
           return;
         }
         console.log(res.data)
@@ -91,8 +91,8 @@ export default class LoginScreen extends Component {
           />
         </View>
 
-        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}>
-          {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Simulasi')} > */}
+        {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}> */}
+          <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} >
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
