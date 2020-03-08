@@ -15,7 +15,7 @@ export default class AboutScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>To-Do > About Dreambox Page</Text>
+        <Text> By Kelompok 1 - Sprint</Text>
       </View>
     );
   }
