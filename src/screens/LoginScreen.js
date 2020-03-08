@@ -4,17 +4,13 @@ import {
   Text,
   View,
   TextInput,
-  TouchableHighlight,
   Image,
   Alert,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  AsyncStorage
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { APIDREAMBOX } from "../library/APIs";
 import { Spinner } from 'native-base';
-import { createStackNavigator } from 'react-navigation';
-import HomeScreen from "./HomeScreen";
 import axios from "axios";
 
 export default class LoginScreen extends Component {
@@ -30,15 +26,27 @@ export default class LoginScreen extends Component {
     this.state = {
       email: '',
       password: '',
-      visible: false
+      loading: false,
     }
   }
 
   _submit = () => {
-    this.setState({ visible: true })
+    this.setState({ loading: true })
+    if (this.state.email === '') {
+      this.setState({ loading: false })
+      Alert.alert("Info", "Email Tidak Boleh Kosong");
+      return;
+    }
+
+    if (this.state.password === '') {
+      this.setState({ loading: false })
+      Alert.alert("Info", "Password Tidak Boleh Kosong");
+      return;
+    }
 
     if (this.state.email === '' && this.state.password === '') {
-      Alert.alert("Info", "Data Tidak Boleh Kosong");
+      this.setState({ loading: false })
+      Alert.alert("Info", "Seluruh Data Harus Diisi!");
       return;
     }
 
@@ -49,14 +57,16 @@ export default class LoginScreen extends Component {
 
     axios.post('http://mydreambox.herokuapp.com/auth/login', param)
       .then((res) => {
-        this.setState({ visible: false })
-        if (res.data.data != null) {
-          console.log(res.data)
-          this.props.navigation.navigate('Input')
+        const responseJSON = res.data.data
+        const CIF = responseJSON.CIF
+
+        AsyncStorage.setItem('CIF', CIF)
+        this.setState({ loading: false })
+        if (responseJSON != null) {
+          this.props.navigation.navigate('Home')
           return;
         }
-        console.log(res.data)
-        alert('Not OK');
+        alert('Terjadi Kesalahan OK');
       }).catch((error) => {
         console.log(error)
       });
@@ -72,7 +82,7 @@ export default class LoginScreen extends Component {
         <Image style={styles.imageContainer}
           source={require('./../assets/logo.png')}
         />
-        {this.state.visible && (<Spinner color="green" />)}
+        {this.state.loading && (<Spinner color="green" />)}
         <View style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Email"
@@ -91,8 +101,8 @@ export default class LoginScreen extends Component {
           />
         </View>
 
-        {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}> */}
-          <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} >
+        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}>
+          {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} > */}
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
