@@ -4,8 +4,7 @@ import { createBottomTabNavigator } from "react-navigation";
 import {
   HomeNavigator,
   ProfileNavigator,
-  SearchNavigator,
-  ListDreamboxNav
+  SearchNavigator
 } from "./screen-stack-navigators";
 
 const getTabBarIcon = (navigation, focused, tintColor) => {
@@ -14,8 +13,8 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
   let iconName;
   if (routeName === "Home") {
     iconName = "ios-home";
-  } else if (routeName === "Notifikasi") {
-    iconName = "ios-notifications";
+  } else if (routeName === "History") {
+    iconName = "ios-more";
   } else if (routeName === "Profile") {
     iconName = "ios-contact";
   } 
@@ -24,10 +23,9 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 };
 
 const BottomTabNavigator = createBottomTabNavigator(
-  // cuman 3 ini aja bener, tapi....
   {
     Home: HomeNavigator,
-    Notifikasi: SearchNavigator,
+    History: SearchNavigator,
     Profile: ProfileNavigator,
   },
   {

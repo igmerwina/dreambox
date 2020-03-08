@@ -91,7 +91,8 @@ export default class DetailDreambox extends Component {
                 <ProgressBarAndroid
                   styleAttr="Horizontal"
                   indeterminate={false}
-                  progress={3.5}
+                  progress={1}
+                  style={{ height: 16 }}
                 />
               </View>
             </ListItem>

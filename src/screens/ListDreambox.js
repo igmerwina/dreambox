@@ -24,8 +24,8 @@ export default class ListDreambox extends Component {
     super(props);
     this.state = {
       data: [
-        { id: 1, link: "Detail", name: "Rumah",       image: "https://img.icons8.com/clouds/100/000000/groups.png",           target: 2050 },
-        { id: 2, link: "Detail", name: "Haji",        image: "https://img.icons8.com/color/100/000000/real-estate.png",       target: 2030 },
+        { id: 1, link: "Detail", name: "Rumah",       image: "https://img.icons8.com/color/100/000000/real-estate.png",       target: 2050 },
+        { id: 2, link: "Detail", name: "Haji",        image: "https://img.icons8.com/clouds/100/000000/groups.png",           target: 2030 },
         { id: 3, link: "Detail", name: "Pendidikan",  image: "https://img.icons8.com/color/100/000000/find-matching-job.png", target: 2035 },
         { id: 4, link: "Detail", name: "Menikah",     image: "https://img.icons8.com/clouds/100/000000/employee-card.png",    target: 2025 },
         { id: 5, link: "Detail", name: "Tabungan",    image: "https://img.icons8.com/color/100/000000/land-sales.png",        target: 2030 },
@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
     alignSelf: 'center',
-    color: "#6666ff"
+    color: "#6666ff",
+    fontWeight: 'bold'
   },
   followButton: {
     marginTop: 10,

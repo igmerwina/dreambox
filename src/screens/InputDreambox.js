@@ -19,7 +19,7 @@ import axios from 'axios';
 import moment from 'moment';
 import Icon from "react-native-vector-icons/Ionicons";
 import { TextInputMask } from "react-native-masked-text";
-import { StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableHighlight, Image } from 'react-native';
 
 export default class InputDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -57,11 +57,11 @@ export default class InputDreambox extends Component {
   }
 
   _submit = () => {
-    console.log('INPUT DREAMBOX');
+/*     console.log('INPUT DREAMBOX');
     console.log("cif: " + this.state.cif)
     console.log("id_kategori: " + this.state.idKat)
     console.log("dana: " + this.state.nominal)
-    console.log("target: " + this.state.targetTercapai);
+    console.log("target: " + this.state.targetTercapai); */
 
     this.setState({ loading: true })
 
@@ -95,7 +95,6 @@ export default class InputDreambox extends Component {
     return (
       <Container>
         <Content style={styles.container}>
-          {this.state.loading && (<Spinner color="green" />)}
           <Card>
             <CardItem header bordered>
               <Text style={styles.picker}>Masukan Dream kamu</Text>
@@ -160,6 +159,7 @@ export default class InputDreambox extends Component {
               </Card>
             )
           }
+          {this.state.loading && (<Spinner color="green" />)}
           <Button block info style={styles.button} onPress={this._submit}>
             <Text style={styles.buttonText}>Simpan</Text>
           </Button>

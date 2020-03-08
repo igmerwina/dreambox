@@ -3,7 +3,7 @@ import { createStackNavigator } from "react-navigation";
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import SearchScreen from "../screens/SearchScreen";
+import HistoryScreen from "../screens/HistoryScreen";
 import AboutScreen from "../screens/AboutScreen";
 import ListDreambox from "../screens/ListDreambox";
 import InputDreambox from "../screens/InputDreambox";
@@ -25,7 +25,7 @@ export const ProfileNavigator = createStackNavigator({
 });
 
 export const SearchNavigator = createStackNavigator({
-  Search: { screen: SearchScreen }
+  Search: { screen: HistoryScreen }
 });
 
 export const ListDreamboxNav = createStackNavigator({
