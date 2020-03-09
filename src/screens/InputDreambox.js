@@ -31,9 +31,10 @@ export default class InputDreambox extends Component {
     };
   };
 
+  // Get Data CIF pas Login
   async componentDidMount() {
     const data = await AsyncStorage.getItem('CIF');
-    this.setState({ cif:data })
+    this.setState({ cif: data })
     console.log('Sukses ambil CIF: ' + data);
   };
 
@@ -42,32 +43,28 @@ export default class InputDreambox extends Component {
 
     this.state = {
       cif: '',
-      idKat: '',
+      idKategori: '',
       nominal: '',
       targetTercapai: '',
       konversiEmas: '',
-      loading: false,
-      // selected: value 
+      index: '',
+      loading: false
     };
     this.setDate = this.setDate.bind(this);
   }
 
+  // format data sesuaiin sama backend [OK]
   setDate(date) {
-    const halo = moment(date).format('YYYY-MM-DD')
-    this.setState({ targetTercapai: halo });
-    alert(this.state.targetTercapai)
+    const formatDate = moment(date).format('YYYY-MM-DD')
+    this.setState({ targetTercapai: formatDate });
   }
-
-  onValueChange(value: string) {
-    this.setState({ selected: value });
-  }
-
+  
   _submit = () => {
     this.setState({ loading: true })
 
     const param = {
       cif: this.state.cif,
-      id_kategori: this.state.idKat,
+      id_kategori: this.state.idKategori,
       dana: this.state.nominal,
       target: this.state.targetTercapai
     };
@@ -104,12 +101,11 @@ export default class InputDreambox extends Component {
                 <Picker
                   mode="dropdown"
                   iosIcon={<Icon name="ios-arrow-dropdown" />}
-                  style={{ width: undefined }}
                   placeholder="Pilih Jenis Dreamboxmu"
                   placeholderStyle={{ color: "#bfc6ea" }}
                   placeholderIconColor="#007aff"
-                  selectedValue={this.state.selected}
-                  onValueChange={this.onValueChange.bind(this)}
+                  selectedValue={this.state.idKategori}
+                  onValueChange={(itemValue, itemIndex) => this.setState({ idKategori: itemValue, index: itemIndex })}
                 >
                   <Picker.Item label="Haji" value="CA001" />
                   <Picker.Item label="Rumah" value="CA002" />
@@ -141,7 +137,7 @@ export default class InputDreambox extends Component {
                   placeHolderTextStyle={{ color: "#d3d3d3" }}
                   formatChosenDate={date => { return moment(date).format('YYYY-MM-DD'); }}
                   onDateChange={date => this.setDate(date)}
-                  disabled={false}                  
+                  disabled={false}
                 />
               </Item>
               <Item stackedLabel>
