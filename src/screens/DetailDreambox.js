@@ -14,7 +14,8 @@ import {
   Body,
   ListItem,
   Right,
-  View
+  View,
+  Spinner
 } from 'native-base';
 
 export default class DetailDreambox extends Component {
@@ -27,80 +28,120 @@ export default class DetailDreambox extends Component {
     };
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      update: false,
+      cancel: false,
+      loading: false,
+
+      saldoTarget: '',
+      namaDream: '',
+      tanggalTercapai: '',
+      urlGambar: '',
+      autoDebit: '',
+      saldoTotal: '',
+      progress: '',
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ loading: true })
+
+    fetch("http://mydreambox.herokuapp.com/dreambox/detailbyid/74")
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({
+          loading: false,
+          namaDream: responseJson.data[0].nama,
+          urlGambar: responseJson.data[0].url_gambar,
+          autoDebit: responseJson.data[0].tarikan_otomatis,
+          saldoTotal: responseJson.data[0].saldo,
+          saldoTarget: responseJson.data[0].target_gram,
+          progress: responseJson.data[0].progress,
+          tanggalTercapai: responseJson.data[0].target,
+        })
+      })
+      .catch(error => console.log(error))
+  }
+
+  _update = () => {
+
+  }
+
   render() {
+    const persen = Number(this.state.progress * 100)
+    const progres = String(this.state.progress)
+    console.log(this.state.namaDream)
+
     return (
       <Container>
-        <Content style={{ padding: 10 }}>
-          <Card style={{ padding: 10 }}>
-            <H2 style={{ textAlign: 'center', color: '#65A898' }}>Impian Rumah Kamu</H2>
-            <CardItem>
-              <Body>
-                <Image
-                  source={{ uri: 'https://rumahdijual.com/attachments/bsd/6452585d1470903675-perumahan-bsd-city-akses-tol-bsd-jakarta-amarine-020.jpg' }}
-                  style={{ height: 200, width: 320, flex: 1, alignItems: 'center' }}
-                />
-              </Body>
-            </CardItem>
-            <ListItem icon>
-              <Left>
-                <Button style={{ backgroundColor: "#65A898" }}>
-                  <Icon active name="ios-arrow-dropup-circle" />
-                </Button>
-                <Text> Target Tercapai:                  </Text>
-              </Left>
-              <Right>
-                <Text>2050</Text>
-              </Right>
-            </ListItem>
-            <ListItem icon>
-              <Left>
-                <Button style={{ backgroundColor: "#65A898" }}>
-                  <Icon active name="ios-leaf" />
-                </Button>
-                <Text> Saldo Emas Saat Ini: </Text>
-              </Left>
-              <Right>
-                <Text>800 gram</Text>
-              </Right>
-            </ListItem>
-            <ListItem icon>
-              <Left>
-                <Button style={{ backgroundColor: "#65A898" }}>
-                  <Icon active name="md-appstore" />
-                </Button>
-                <Text> Pemotongan:          </Text>
-              </Left>
-              <Right>
-                <Text>Tanggal 17</Text>
-              </Right>
-            </ListItem>
-            <ListItem icon>
-              <Left>
-                <Button style={{ backgroundColor: "#65A898" }}>
-                  <Icon active name="logo-freebsd-devil" />
-                </Button>
-                <Text> Target Dreambox:      </Text>
-              </Left>
-              <Right>
-                <Text>800 gram</Text>
-              </Right>
-            </ListItem>
-            <ListItem>
-              <View>
-                <Text>{"\n"} Target Pencapaian sudah mencapai 60%</Text>
-                <ProgressBarAndroid
-                  styleAttr="Horizontal"
-                  indeterminate={false}
-                  progress={1}
-                  style={{ height: 16 }}
-                />
-              </View>
-            </ListItem>
-          </Card>
-          <Button block info style={styles.button} onPress={() => { this.props.navigation.navigate('List') }}>
-            <Text style={styles.buttonText}>Kembali</Text>
-          </Button>
-        </Content>
+        {this.state.loading && (<Spinner  size={"large"} style={styles.spinner} color="green" />)}
+        {!this.state.loading && (
+          <Content style={{ padding: 10 }}>
+            <Card style={{ padding: 10 }}>
+              <H2 style={styles.title}>{this.state.namaDream} Impian Kamu</H2>
+              <CardItem>
+                <Body>
+                  <Image
+                    source={{ uri: this.state.urlGambar }}
+                    style={styles.images}
+                  />
+                </Body>
+              </CardItem>
+              <ListItem icon>
+                <Left>
+                  <Button disabled style={styles.buttonColor}>
+                    <Icon active name="ios-arrow-dropup-circle" />
+                  </Button>
+                </Left>
+                <Text>Tercapai Pada: </Text>
+                <Right>
+                  <Text>{this.state.tanggalTercapai}</Text>
+                </Right>
+              </ListItem>
+              <ListItem icon>
+                <Left>
+                  <Button disabled style={styles.buttonColor}>
+                    <Icon active name="ios-leaf" />
+                  </Button>
+                </Left>
+                <Text>Saldo Emas Saat Ini: </Text>
+                <Right>
+                  <Text>{this.state.saldoTotal} gram</Text>
+                </Right>
+              </ListItem>
+              <ListItem icon>
+                <Left>
+                  <Button disabled style={styles.buttonColor}>
+                    <Icon active name="md-appstore" />
+                  </Button>
+                </Left>
+                <Text>Target Saldo Emas : </Text>
+                <Right>
+                  <Text>{this.state.saldoTarget}</Text>
+                </Right>
+              </ListItem>
+              <ListItem style={{ marginBottom: 20 }}>
+                <View>
+                  <Text>{"\n"} Target Pencapaian sudah mencapai {persen}% </Text>
+                  <ProgressBarAndroid
+                    styleAttr="Horizontal"
+                    indeterminate={false}
+                    progress={0.6}
+                    style={{ height: 16 }}
+                  />
+                </View>
+              </ListItem>
+            </Card>
+            {!this.state.update && (
+              <Button block info style={styles.button} onPress={() => { this.props.navigation.navigate('List') }}>
+                <Text style={styles.buttonText}>Kembali</Text>
+              </Button>
+            )}
+          </Content>
+        )}
       </Container>
     );
   }
@@ -111,6 +152,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center"
+  },
+  title: {
+    fontWeight: "bold",
+    textAlign: 'center',
+    color: '#65A898'
+  },
+  images: {
+    padding: 5,
+    height: 200,
+    width: 320,
+    flex: 1,
+    alignItems: 'center'
   },
   button: {
     marginTop: 10,
@@ -126,4 +179,14 @@ const styles = StyleSheet.create({
   buttonText: {
     fontWeight: 'bold'
   },
+  buttonColor: {
+    backgroundColor: "#65A898",
+  },
+  padding: {
+    padding: 10
+  },
+  spinner: {
+    marginTop: "50%",
+    alignItems: "center"
+  }
 });
