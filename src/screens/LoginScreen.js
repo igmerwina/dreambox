@@ -4,41 +4,72 @@ import {
   Text,
   View,
   TextInput,
-  TouchableHighlight,
   Image,
   Alert,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  AsyncStorage
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { APIDREAMBOX } from "../library/APIs";
+import { Spinner } from 'native-base';
+import axios from "axios";
 
-export default class Login extends Component {
+export default class LoginScreen extends Component {
+  // dipake biar kebaca di stack navigator 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLayoutPreset: "center"
+    };
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       email: '',
       password: '',
+      loading: false,
     }
   }
 
   _submit = () => {
-    if (this.state.email === '' && this.state.password === '') {
-      Alert.alert("Info", "Data Tidak Boleh Kosong");
+    this.setState({ loading: true })
+    if (this.state.email === '') {
+      this.setState({ loading: false })
+      Alert.alert("Info", "Email Tidak Boleh Kosong");
       return;
     }
 
-    APIDREAMBOX().postLogin(this.state.email, this.state.password).then(response => {
-      const responseJSON = response.data
-      console.log(responseJSON)
-      // if(responseJSON.code != '200'){
-      //   alert("Username Atau Password Salah")
-      //   return;
-      // } 
+    if (this.state.password === '') {
+      this.setState({ loading: false })
+      Alert.alert("Info", "Password Tidak Boleh Kosong");
+      return;
+    }
 
-      // alert("Mantap!")
-    })
+    if (this.state.email === '' && this.state.password === '') {
+      this.setState({ loading: false })
+      Alert.alert("Info", "Seluruh Data Harus Diisi!");
+      return;
+    }
+
+    const param = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    axios.post('http://mydreambox.herokuapp.com/auth/login', param)
+      .then((res) => {
+        const responseJSON = res.data.data
+        const CIF = responseJSON.CIF
+
+        AsyncStorage.setItem('CIF', CIF)
+        this.setState({ loading: false })
+        if (responseJSON != null) {
+          this.props.navigation.navigate('Home')
+          return;
+        }
+        alert('Terjadi Kesalahan OK');
+      }).catch((error) => {
+        console.log(error)
+      });
   }
 
   render() {
@@ -51,6 +82,7 @@ export default class Login extends Component {
         <Image style={styles.imageContainer}
           source={require('./../assets/logo.png')}
         />
+        {this.state.loading && (<Spinner color="green" />)}
         <View style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Email"
@@ -69,9 +101,10 @@ export default class Login extends Component {
           />
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}>
+        {/* <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={this._submit}> */}
+        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} >
           <Text style={styles.loginText}>Login</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('button works')}>
           <Text>Forgot your password?</Text>
@@ -90,7 +123,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#DCDCDC',
   },
   bgImage: {
     flex: 1,

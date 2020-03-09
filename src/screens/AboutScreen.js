@@ -1,20 +1,21 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { Component } from "react";
 import { MenuButton, Logo } from "../components/header/header";
+import { HeaderBackButton } from "react-navigation";
 
-export default class SearchScreen extends React.Component {
+export default class AboutScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
       headerTitle: <Logo />,
-      headerBackTitle: "Search",
+      headerBackTitle: "Settings",
       headerLayoutPreset: "center"
     };
   };
   render() {
     return (
       <View style={styles.container}>
-        <Text>Hello! Welcome to my search page</Text>
+        <Text> By Kelompok 1 - Sprint</Text>
       </View>
     );
   }

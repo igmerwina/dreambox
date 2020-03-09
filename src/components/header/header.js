@@ -23,7 +23,7 @@ export class Logo extends React.Component {
 export class MenuButton extends React.Component {
     render() {
         return (
-            <TouchableOpacity onPress = {this.props.onPress} ><Icon name = "md-menu" size={30} style = {{color: 'black',paddingLeft: 10}}/></TouchableOpacity>
+            <TouchableOpacity onPress = {this.props.onPress} ><Icon name = "ios-menu" size={25} style = {{color: 'grey',paddingLeft: 10}}/></TouchableOpacity>
         );
     }
 }

@@ -13,8 +13,8 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
   let iconName;
   if (routeName === "Home") {
     iconName = "ios-home";
-  } else if (routeName === "Notifikasi") {
-    iconName = "ios-notifications";
+  } else if (routeName === "History") {
+    iconName = "ios-more";
   } else if (routeName === "Profile") {
     iconName = "ios-contact";
   } 
@@ -25,8 +25,8 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
 const BottomTabNavigator = createBottomTabNavigator(
   {
     Home: HomeNavigator,
-    Notifikasi: SearchNavigator,
-    Profile: ProfileNavigator
+    History: SearchNavigator,
+    Profile: ProfileNavigator,
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
