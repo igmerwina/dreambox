@@ -29,6 +29,7 @@ export default class HistoryScreen extends React.Component {
     super(props);
     this.state = {
       transactionHistory: [],
+      titleHistory: '',
       loading: false
     };
   }
@@ -38,9 +39,11 @@ export default class HistoryScreen extends React.Component {
     fetch("http://mydreambox.herokuapp.com/dreambox/listtransaksi/74")
       .then(response => response.json())
       .then((responseJson) => {
+        console.log(responseJson.history)
         this.setState({
           loading: false,
-          transactionHistory: responseJson.data
+          transactionHistory: responseJson.data.history,
+          titleHistory: responseJson.data.nama_dreambox
         })
       })
       .catch(error => console.log(error))
@@ -52,6 +55,7 @@ export default class HistoryScreen extends React.Component {
         <Content style={{ padding: 16 }}>
           <H2 style={styles.title}>Daftar Transaksi</H2>
           <Card>
+            <Text style={styles.titleHistory }>Jenis Impian: {this.state.titleHistory}</Text>
             <CardItem>
               {this.state.loading && (<Spinner style={styles.spinner} color="green" />)}
               <List
@@ -59,7 +63,7 @@ export default class HistoryScreen extends React.Component {
                 renderRow={(item, key) =>
                   <ListItem>
                     <Left>
-                      <Text>{item.tanggal_debit}</Text>
+                      <Text>{item.target_tanggal}</Text>
                     </Left>
                     <Right>
                       <Text style={{ fontSize: 10 }}>+ {item.jumlah_gram_bulanan} gram</Text>
@@ -86,6 +90,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     color: '#65A898'
+  },
+  titleHistory: {
+    marginLeft: 20,
+    marginTop: 5,
+    marginBottom: 5,
+    fontWeight: 'bold',
+    color: '#65A899',
+    textDecorationLine: 'underline',
+    textDecorationColor: 'black'
   },
   spinner: {
     marginLeft: "50%"
