@@ -46,7 +46,7 @@ export default class InputDreambox extends Component {
       idKategori: '',
       nominal: '',
       targetTercapai: '',
-      konversiEmas: '',
+      konversiEmas: 0,
       index: '',
       loading: false
     };
@@ -58,7 +58,7 @@ export default class InputDreambox extends Component {
     const formatDate = moment(date).format('YYYY-MM-DD')
     this.setState({ targetTercapai: formatDate });
   }
-  
+
   _submit = () => {
     this.setState({ loading: true })
 
@@ -87,7 +87,9 @@ export default class InputDreambox extends Component {
   }
 
   render() {
-    const konvertEmas = this.state.nominal / 7600;
+    // const konvertEmas = Numberthis.state.nominal / 7600;
+    const konvertEmas = Number((this.state.nominal) / 7600).toFixed(4)
+    // this.setState({ konversiEmas: konvertEmas })
 
     return (
       <Container>
@@ -142,7 +144,7 @@ export default class InputDreambox extends Component {
               </Item>
               <Item stackedLabel>
                 <Label>Konversi Emas</Label>
-                <Text>2 Gram</Text>
+                <Text>{konvertEmas} gram</Text>
               </Item>
             </Form>
           </Card>
