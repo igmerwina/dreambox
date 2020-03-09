@@ -19,7 +19,7 @@ import axios from 'axios';
 import moment from 'moment';
 import Icon from "react-native-vector-icons/Ionicons";
 import { TextInputMask } from "react-native-masked-text";
-import { StyleSheet, TouchableHighlight, Image } from 'react-native';
+import { StyleSheet, TouchableHighlight, Image, AsyncStorage } from 'react-native';
 
 export default class InputDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -31,38 +31,38 @@ export default class InputDreambox extends Component {
     };
   };
 
+  async componentDidMount() {
+    const data = await AsyncStorage.getItem('CIF');
+    this.setState({ cif:data })
+    console.log('Sukses ambil CIF: ' + data);
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      cif: '1011822505',
-      idKat: 'CA001',
+      cif: '',
+      idKat: '',
       nominal: '',
-      targetTercapai: '2025-10-10',
+      targetTercapai: '',
       konversiEmas: '',
-      // chosenDate: ''
-      loading: false
+      loading: false,
+      // selected: value 
     };
-    // this.setDate = this.setDate.bind(this);
+    this.setDate = this.setDate.bind(this);
   }
 
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
+  setDate(date) {
+    const halo = moment(date).format('YYYY-MM-DD')
+    this.setState({ targetTercapai: halo });
+    alert(this.state.targetTercapai)
   }
 
-  onValueChange2(value: string) {
-    this.setState({
-      selected2: value
-    });
+  onValueChange(value: string) {
+    this.setState({ selected: value });
   }
 
   _submit = () => {
-/*     console.log('INPUT DREAMBOX');
-    console.log("cif: " + this.state.cif)
-    console.log("id_kategori: " + this.state.idKat)
-    console.log("dana: " + this.state.nominal)
-    console.log("target: " + this.state.targetTercapai); */
-
     this.setState({ loading: true })
 
     const param = {
@@ -97,25 +97,25 @@ export default class InputDreambox extends Component {
         <Content style={styles.container}>
           <Card>
             <CardItem header bordered>
-              <Text style={styles.picker}>Masukan Dream kamu</Text>
+              <Text style={styles.pickerTitle}>Masukan Dream kamu</Text>
             </CardItem>
             <Form>
               <Item picker style={styles.picker}>
                 <Picker
                   mode="dropdown"
-                  iosIcon={<Icon name="arrow-down" />}
+                  iosIcon={<Icon name="ios-arrow-dropdown" />}
                   style={{ width: undefined }}
                   placeholder="Pilih Jenis Dreamboxmu"
                   placeholderStyle={{ color: "#bfc6ea" }}
                   placeholderIconColor="#007aff"
-                  selectedValue={this.state.selected2}
-                  onValueChange={this.onValueChange2.bind(this)}
+                  selectedValue={this.state.selected}
+                  onValueChange={this.onValueChange.bind(this)}
                 >
-                  <Picker.Item label="Menikah" value="key0" />
-                  <Picker.Item label="Pendidikan" value="key1" />
-                  <Picker.Item label="Rumah" value="key2" />
-                  <Picker.Item label="Kendaraan" value="key3" />
-                  <Picker.Item label="Haji" value="key4" />
+                  <Picker.Item label="Haji" value="CA001" />
+                  <Picker.Item label="Rumah" value="CA002" />
+                  <Picker.Item label="Pendidikan" value="CA003" />
+                  <Picker.Item label="Menikah" value="CA004" />
+                  <Picker.Item label="Kendaraan" value="CA005" />
                 </Picker>
               </Item>
               <Item stackedLabel>
@@ -132,6 +132,7 @@ export default class InputDreambox extends Component {
                   minimumDate={new Date(2025, 1, 1)}
                   maximumDate={new Date(3000, 12, 31)}
                   locale={"id"}
+                  format="YYYY-MM-DD"
                   modalTransparent={true}
                   animationType={"slide"}
                   androidMode={"default"}
@@ -139,7 +140,8 @@ export default class InputDreambox extends Component {
                   textStyle={{ color: "black" }}
                   placeHolderTextStyle={{ color: "#d3d3d3" }}
                   formatChosenDate={date => { return moment(date).format('YYYY-MM-DD'); }}
-                  onDateChange={this.setDate}
+                  onDateChange={date => this.setDate(date)}
+                  disabled={false}                  
                 />
               </Item>
               <Item stackedLabel>
@@ -189,6 +191,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: 'bold'
+  },
+  pickerTitle: {
+    color: '#65A898',
+    marginLeft: 20
   },
   picker: {
     marginLeft: 20
