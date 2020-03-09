@@ -87,9 +87,7 @@ export default class InputDreambox extends Component {
   }
 
   render() {
-    // const konvertEmas = Numberthis.state.nominal / 7600;
-    const konvertEmas = Number((this.state.nominal) / 7600).toFixed(4)
-    // this.setState({ konversiEmas: konvertEmas })
+    const konvertEmas = Number((this.state.nominal) / 800000).toFixed(2)
 
     return (
       <Container>
@@ -153,8 +151,8 @@ export default class InputDreambox extends Component {
               <Card>
                 <CardItem footer bordered>
                   <Text style={styles.notification}>
-                    Saldo Kamu akan dipotong sebanyak 2 gram
-                    </Text>
+                    Saldo akan terpotong sebanyak {konvertEmas} gram
+                  </Text>
                 </CardItem>
               </Card>
             )
@@ -198,6 +196,6 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   notification: {
-    color: 'red'
+    color: '#65A999'
   }
 })
