@@ -72,8 +72,7 @@ export default class DetailDreambox extends Component {
 
   render() {
     const persen = Number(this.state.progress * 100)
-    const progres = String(this.state.progress)
-    console.log(this.state.namaDream)
+    const progress = Number(this.state.progress)
 
     return (
       <Container>
@@ -81,7 +80,7 @@ export default class DetailDreambox extends Component {
         {!this.state.loading && (
           <Content style={{ padding: 10 }}>
             <Card style={{ padding: 10 }}>
-              <H2 style={styles.title}>{this.state.namaDream} Impian Kamu</H2>
+              <H2 style={styles.title}>Aku ingin.... {this.state.namaDream} </H2>
               <CardItem>
                 <Body>
                   <Image
@@ -129,7 +128,7 @@ export default class DetailDreambox extends Component {
                   <ProgressBarAndroid
                     styleAttr="Horizontal"
                     indeterminate={false}
-                    progress={0.6}
+                    progress={progress}
                     style={{ height: 16 }}
                   />
                 </View>
