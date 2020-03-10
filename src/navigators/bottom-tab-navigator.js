@@ -14,7 +14,7 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
   if (routeName === "Home") {
     iconName = "ios-home";
   } else if (routeName === "History") {
-    iconName = "ios-more";
+    iconName = "md-reorder";
   } else if (routeName === "Profile") {
     iconName = "ios-contact";
   } 

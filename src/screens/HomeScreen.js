@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     //flexBasis: '42%',
     width: 120,
     height: 120,
-    borderRadius: 60,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center'
   },

@@ -117,6 +117,7 @@ export default class InputDreambox extends Component {
               <Item stackedLabel>
                 <Label>Nominal</Label>
                 <Input
+                  maxLength={15}
                   placeholder={"Rp"}
                   onChangeText={(nominal) => this.setState({ nominal })}
                 />
