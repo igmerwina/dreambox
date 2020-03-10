@@ -1,4 +1,4 @@
-import { StyleSheet, Image, ProgressBarAndroid } from "react-native";
+import { StyleSheet, Image, ProgressBarAndroid, Alert } from "react-native";
 import React, { Component } from "react";
 import { MenuButton, Logo } from "../components/header/header";
 import {
@@ -10,13 +10,16 @@ import {
   Text,
   Button,
   Icon,
-  Left,
   Body,
   ListItem,
-  Right,
+  DatePicker,
   View,
-  Spinner
+  Spinner,
+  Item,
+  Input
 } from 'native-base';
+import axios from 'axios';
+import moment from 'moment';
 
 export default class DetailDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -32,18 +35,21 @@ export default class DetailDreambox extends Component {
     super(props);
 
     this.state = {
+      modal: false,
       update: false,
       cancel: false,
       loading: false,
 
-      saldoTarget: '',
       namaDream: '',
       tanggalTercapai: '',
-      urlGambar: '',
-      autoDebit: '',
-      saldoTotal: '',
+      urlGambar: 'Loading...',
+      targetEmas: '',
       progress: '',
+
+      idDreambox: 74,
+      totalDana: 100000000 // nanti berubah nunggu API mel
     };
+    this.setDate = this.setDate.bind(this);
   }
 
   componentDidMount() {
@@ -56,9 +62,7 @@ export default class DetailDreambox extends Component {
           loading: false,
           namaDream: responseJson.data[0].nama,
           urlGambar: responseJson.data[0].url_gambar,
-          autoDebit: responseJson.data[0].tarikan_otomatis,
-          saldoTotal: responseJson.data[0].saldo,
-          saldoTarget: responseJson.data[0].target_gram,
+          targetEmas: responseJson.data[0].target_gram,
           progress: responseJson.data[0].progress,
           tanggalTercapai: responseJson.data[0].target,
         })
@@ -66,20 +70,51 @@ export default class DetailDreambox extends Component {
       .catch(error => console.log(error))
   }
 
-  _update = () => {
+  setDate(date) {
+    const formatDate = moment(date).format('YYYY-MM-DD')
+    this.setState({ tanggalTercapai: formatDate });
+  }
 
+  _setUpdate = () => {
+    this.setState({ update: !this.state.update })
+  }
+
+  _simpanUpdate = () => {
+    this.setState({ loading: true })
+
+    const param = {
+      id_dreambox: this.state.idDreambox,
+      dana: this.state.totalDana,
+      target: this.state.tanggalTercapai
+    };
+
+    axios.post('http://mydreambox.herokuapp.com/dreambox/update', param)
+      .then((res) => {
+        const responseJSON = res.data
+        if (responseJSON.status != "SUCCESS") {
+          this.setState({ loading: false })
+          console.log(res.data)
+          Alert.alert('Data yang anda masukan salah')
+          return;
+        }
+        this.setState({ loading: false })
+        Alert.alert('Sukses', 'Update Berhasil!')
+      }).catch((error) => {
+        this.setState({ loading: false })
+        console.log(error)
+      });
   }
 
   render() {
-    const persen = Number(this.state.progress * 100)
+    const persen = Number(this.state.progress * 100).toFixed(1)
     const progress = Number(this.state.progress)
 
     return (
       <Container>
-        {this.state.loading && (<Spinner  size={"large"} style={styles.spinner} color="green" />)}
+        {this.state.loading && (<Spinner size={"large"} style={styles.spinner} color="green" />)}
         {!this.state.loading && (
-          <Content style={{ padding: 10 }}>
-            <Card style={{ padding: 10 }}>
+          <Content style={styles.paddingTen}>
+            <Card style={styles.paddingTen}>
               <H2 style={styles.title}>Aku ingin.... {this.state.namaDream} </H2>
               <CardItem>
                 <Body>
@@ -89,56 +124,101 @@ export default class DetailDreambox extends Component {
                   />
                 </Body>
               </CardItem>
-              <ListItem icon>
-                <Left>
-                  <Button disabled style={styles.buttonColor}>
-                    <Icon active name="ios-arrow-dropup-circle" />
-                  </Button>
-                </Left>
-                <Text>Tercapai Pada: </Text>
-                <Right>
-                  <Text>{this.state.tanggalTercapai}</Text>
-                </Right>
-              </ListItem>
-              <ListItem icon>
-                <Left>
-                  <Button disabled style={styles.buttonColor}>
-                    <Icon active name="ios-leaf" />
-                  </Button>
-                </Left>
-                <Text>Saldo Emas Saat Ini: </Text>
-                <Right>
-                  <Text>{this.state.saldoTotal} gram</Text>
-                </Right>
-              </ListItem>
-              <ListItem icon>
-                <Left>
-                  <Button disabled style={styles.buttonColor}>
-                    <Icon active name="md-appstore" />
-                  </Button>
-                </Left>
-                <Text>Target Saldo Emas : </Text>
-                <Right>
-                  <Text>{this.state.saldoTarget}</Text>
-                </Right>
-              </ListItem>
-              <ListItem style={{ marginBottom: 20 }}>
-                <View>
-                  <Text>{"\n"} Target Pencapaian sudah mencapai {persen}% </Text>
+              <View style={styles.buttonGroup}>
+                <Button bordered warning small onPress={() => this._setUpdate()}>
+                  <Text>Update</Text>
+                  <Icon name="ios-swap" />
+                </Button>
+                <Button bordered small danger>
+                  <Text>Delete</Text>
+                  <Icon name="ios-trash" />
+                </Button>
+              </View>
+              <View style={styles.paddingTen}>
+                <View style={styles.inputPosition}>
+                  <Icon active name='ios-calendar' />
+                  <Text> Target Selesai: </Text>
+                  <Item>
+                    {!this.state.update ? (
+                      <Input
+                        disabled
+                        style={styles.inputDream}
+                        disabled={true}>
+                        {this.state.tanggalTercapai}
+                      </Input>
+                    ) : (
+                        <DatePicker
+                          minimumDate={new Date(2025, 1, 1)}
+                          maximumDate={new Date(3000, 12, 31)}
+                          locale={"id"}
+                          underlineColorAndroid="#65A898"
+                          modalTransparent={true}
+                          animationType={"slide"}
+                          androidMode={"default"}
+                          placeHolderText="Ganti Tanggal Targetmu"
+                          textStyle={{ color: "black" }}
+                          placeHolderTextStyle={{ color: "#d3d3d3" }}
+                          formatChosenDate={date => { return moment(date).format('YYYY-MM-DD'); }}
+                          onDateChange={date => this.setDate(date)}
+                          disabled={false}
+                        />
+                      )}
+                  </Item>
+                </View>
+                <View style={styles.inputPosition}>
+                  <Icon active name='md-cash' />
+                  <Text> Total Dana: Rp </Text>
+                  <Item>
+                    {!this.state.update ? (
+                      <Input
+                        disabled
+                        style={styles.inputDream}
+                        disabled={true}>
+                        {this.state.totalDana}
+                      </Input>
+                    ) : (
+                        <Input
+                          style={styles.inputDream}
+                          underlineColorAndroid="#65A898"
+                          >
+                          {this.state.totalDana}
+                        </Input>
+                      )}
+                  </Item>
+                </View>
+                <View style={styles.inputPosition}>
+                  <Icon active name='ios-timer' />
+                  <Text> Target Gram Emas: </Text>
+                  <Item>
+                    <Input
+                      disabled
+                      style={styles.inputDream}
+                      disabled={!this.state.update}>
+                      {this.state.targetEmas}
+                    </Input>
+                  </Item>
+                </View>
+              </View>
+              <ListItem>
+                <View style={styles.marginProgress}>
+                  <Text> Target Pencapaian: {persen}% </Text>
                   <ProgressBarAndroid
                     styleAttr="Horizontal"
                     indeterminate={false}
-                    progress={progress}
-                    style={{ height: 16 }}
+                    progress={0.5}
                   />
                 </View>
               </ListItem>
             </Card>
-            {!this.state.update && (
+            {!this.state.update ? (
               <Button block info style={styles.button} onPress={() => { this.props.navigation.navigate('List') }}>
                 <Text style={styles.buttonText}>Kembali</Text>
               </Button>
-            )}
+            ) : (
+                <Button block primary style={styles.button} onPress={this._simpanUpdate} >
+                  <Text style={styles.buttonText}>Simpan</Text>
+                </Button>
+              )}
           </Content>
         )}
       </Container>
@@ -187,5 +267,27 @@ const styles = StyleSheet.create({
   spinner: {
     marginTop: "50%",
     alignItems: "center"
+  },
+  inputDream: {
+    marginRight: 30
+  },
+  inputPosition: {
+    marginRight: 10,
+    marginLeft: 10,
+    flexDirection: 'row',
+    alignItems: "center"
+  },
+  paddingTen: {
+    padding: 10
+  },
+  buttonGroup: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: -7,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  marginProgress: {
+    marginBottom: -10
   }
 });
