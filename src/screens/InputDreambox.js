@@ -48,15 +48,19 @@ export default class InputDreambox extends Component {
       targetTercapai: '',
       konversiEmas: 0,
       index: '',
+      totalMonth: 0,
       loading: false
     };
     this.setDate = this.setDate.bind(this);
   }
 
-  // format data sesuaiin sama backend [OK]
   setDate(date) {
-    const formatDate = moment(date).format('YYYY-MM-DD')
+    const formatDate = moment(date).format('YYYY-MM-DD');
     this.setState({ targetTercapai: formatDate });
+
+    const today = moment();
+    const monthDiff = Number(moment(date).diff(moment(today), 'months', true)).toFixed(0);
+    this.setState({ totalMonth: monthDiff })
   }
 
   _submit = () => {
@@ -88,6 +92,7 @@ export default class InputDreambox extends Component {
 
   render() {
     const konvertEmas = Number((this.state.nominal) / 800000).toFixed(2)
+    const autoDebitEmas = Number(konvertEmas/this.state.totalMonth).toFixed(0);
 
     return (
       <Container>
@@ -120,6 +125,7 @@ export default class InputDreambox extends Component {
                   maxLength={15}
                   placeholder={"Rp"}
                   onChangeText={(nominal) => this.setState({ nominal })}
+                  keyboardType={"numeric"}
                 />
               </Item>
               <Item stackedLabel>
@@ -144,6 +150,14 @@ export default class InputDreambox extends Component {
               <Item stackedLabel>
                 <Label>Konversi Emas</Label>
                 <Text>{konvertEmas} gram</Text>
+              </Item>
+              <Item stackedLabel>
+                <Label>Tarikan Emas Perbulan</Label>
+                <Text>{autoDebitEmas} gram</Text>
+              </Item>
+              <Item stackedLabel>
+                <Label>Tanggal Debit</Label>
+                <Text>Tanggal 17</Text>
               </Item>
             </Form>
           </Card>
@@ -197,6 +211,8 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   notification: {
+    alignContent: 'center',
+    alignItems: 'center',
     color: '#65A999'
   }
 })
