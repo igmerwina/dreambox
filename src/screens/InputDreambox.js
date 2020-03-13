@@ -92,7 +92,7 @@ export default class InputDreambox extends Component {
 
   render() {
     const konvertEmas = Number((this.state.nominal) / 800000).toFixed(2)
-    const autoDebitEmas = Number(konvertEmas/this.state.totalMonth).toFixed(0);
+    const autoDebitEmas = Number(konvertEmas/this.state.totalMonth).toFixed(2);
 
     return (
       <Container>
@@ -132,7 +132,7 @@ export default class InputDreambox extends Component {
                 <Label>Target Tercapai</Label>
                 <DatePicker
                   defaultDate={new Date().getDate()}
-                  minimumDate={new Date(2025, 1, 1)}
+                  minimumDate={new Date(2020, 2, 28)}
                   maximumDate={new Date(3000, 12, 31)}
                   locale={"id"}
                   format="YYYY-MM-DD"
