@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
+  AsyncStorage
 } from 'react-native';
+import { Spinner } from 'native-base';
 import { MenuButton, Logo } from "../components/header/header";
 
 export default class ListDreambox extends Component {
@@ -23,44 +25,56 @@ export default class ListDreambox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [
-        { id: 1, link: "Detail", name: "Rumah",       image: "https://img.icons8.com/color/100/000000/real-estate.png",       target: 2050 },
-        { id: 2, link: "Detail", name: "Haji",        image: "https://img.icons8.com/clouds/100/000000/groups.png",           target: 2030 },
-        { id: 3, link: "Detail", name: "Pendidikan",  image: "https://img.icons8.com/color/100/000000/find-matching-job.png", target: 2035 },
-        { id: 4, link: "Detail", name: "Menikah",     image: "https://img.icons8.com/clouds/100/000000/employee-card.png",    target: 2025 },
-        { id: 5, link: "Detail", name: "Tabungan",    image: "https://img.icons8.com/color/100/000000/land-sales.png",        target: 2030 },
+      data: [],
+      loading: false,
+      menu: [
+        { id: 1, link: "Detail", name: "Rumah", image: "https://img.icons8.com/color/100/000000/real-estate.png", target: 2050 },
+        { id: 2, link: "Detail", name: "Haji", image: "https://img.icons8.com/clouds/100/000000/groups.png", target: 2030 },
+        { id: 3, link: "Detail", name: "Pendidikan", image: "https://img.icons8.com/color/100/000000/find-matching-job.png", target: 2035 },
+        { id: 4, link: "Detail", name: "Menikah", image: "https://img.icons8.com/clouds/100/000000/employee-card.png", target: 2025 },
+        { id: 5, link: "Detail", name: "Tabungan", image: "https://img.icons8.com/color/100/000000/land-sales.png", target: 2030 },
       ]
     };
   }
 
-  clickEventListener = (item) => {
-    Alert.alert('Message', 'Item clicked. ' + item.name);
+  async componentDidMount() {
+    this.setState({ loading: true })
+    const CIF = await AsyncStorage.getItem('CIF');
+    fetch('http://mydreambox.herokuapp.com/dreambox/listbycif/' + CIF)
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({ loading: false })
+        this.setState({ data: responseJson.data })
+        console.log(this.state.data)
+      })
+      .catch(error => console.log(error))
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <FlatList
-          style={styles.contentList}
-          columnWrapperStyle={styles.listContainer}
-          data={this.state.data}
-          keyExtractor={(item) => {
-            return item.name;
-          }}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity style={styles.card} onPress={() => { this.props.navigation.navigate(item.link) }}>
-                <Image style={styles.image} source={{ uri: item.image }} />
-                <View style={styles.cardContent}>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.target}>Target: {item.target}</Text>
-                  <TouchableOpacity style={styles.followButton} onPress={() => { this.props.navigation.navigate(item) }} >
-                    <Text style={styles.followButtonText}>Explore now</Text>
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-            )
-          }} />
+        {this.state.loading && (<Spinner color="green" />)}
+        {this.state.data.length > 0 && (
+          <FlatList
+            style={styles.contentList}
+            columnWrapperStyle={styles.listContainer}
+            data={this.state.data}
+            keyExtractor={(item) => {
+              return item.id_dreambox;
+            }}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity style={styles.card} onPress={() => { this.props.navigation.navigate('Detail') }}>
+                  <Image style={styles.image} source={{ uri: item.url_gambar }} />
+                  <View style={styles.cardContent}>
+                    <Text style={styles.name}>{item.kategori}</Text>
+                    <Text style={styles.target}>Target Tanggal: {item.target}</Text>
+                    <Text style={styles.target}>Target Rupiah: {item.target_rupiah}</Text>
+                  </View>
+                </TouchableOpacity>
+              )
+            }} />
+        )}
       </View>
     );
   }
@@ -117,7 +131,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     color: "#6666ff",
-    fontWeight: 'bold'
+    fontWeight: 'normal',
+    textAlign: 'left'
   },
   followButton: {
     marginTop: 10,
