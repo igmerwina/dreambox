@@ -1,4 +1,4 @@
-import { StyleSheet, Image, ProgressBarAndroid, Alert } from "react-native";
+import { StyleSheet, Image, ProgressBarAndroid, Alert, AsyncStorage } from "react-native";
 import React, { Component } from "react";
 import { MenuButton, Logo } from "../components/header/header";
 import {
@@ -45,6 +45,7 @@ export default class DetailDreambox extends Component {
       urlGambar: 'Loading...',
       targetEmas: '',
       progress: '',
+      cif: '',
 
       idDreambox: 74,
       totalDana: 100000000 // nanti berubah nunggu API mel
@@ -52,8 +53,9 @@ export default class DetailDreambox extends Component {
     this.setDate = this.setDate.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({ loading: true })
+  async componentDidMount() {
+    const CIF = await AsyncStorage.getItem('CIF');
+    this.setState({ loading: true, cif: CIF });
 
     fetch("http://mydreambox.herokuapp.com/dreambox/detailbyid/74")
       .then(response => response.json())
@@ -83,14 +85,18 @@ export default class DetailDreambox extends Component {
     this.setState({ loading: true })
 
     const param = {
+      cif: this.state.cif,
       id_dreambox: this.state.idDreambox,
       dana: this.state.totalDana,
       target: this.state.tanggalTercapai
     };
 
+    console.log(param)
+
     axios.post('http://mydreambox.herokuapp.com/dreambox/update', param)
       .then((res) => {
         const responseJSON = res.data
+        console.log(responseJSON);
         if (responseJSON.status != "SUCCESS") {
           this.setState({ loading: false })
           console.log(res.data)
@@ -205,7 +211,7 @@ export default class DetailDreambox extends Component {
                   <ProgressBarAndroid
                     styleAttr="Horizontal"
                     indeterminate={false}
-                    progress={0.5}
+                    progress={progress}
                   />
                 </View>
               </ListItem>
