@@ -155,7 +155,7 @@ export default class DetailDreambox extends Component {
                       </Input>
                     ) : (
                         <DatePicker
-                          minimumDate={new Date(2025, 1, 1)}
+                          minimumDate={new Date(2021, 0, 1)}
                           maximumDate={new Date(3000, 12, 31)}
                           locale={"id"}
                           underlineColorAndroid="#65A898"
