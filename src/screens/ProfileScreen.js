@@ -4,9 +4,11 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 import { MenuButton, Logo } from "../components/header/header";
+import { Spinner } from 'native-base';
 
 export default class Profile extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -18,6 +20,31 @@ export default class Profile extends Component {
     };
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      cif: '',
+      nama: '',
+      loading: false
+    };
+  }
+
+  async componentDidMount() {
+    const data = await AsyncStorage.getItem('CIF');
+    this.setState({ loading: true, cif: data })
+
+    fetch("http://mydreambox.herokuapp.com/profile/" + this.state.cif)
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({
+          loading: false,
+          nama: responseJson.data[0].nama
+        })
+      })
+      .catch(error => console.log(error))
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -27,7 +54,8 @@ export default class Profile extends Component {
         <Image style={styles.avatar} source={{ uri: 'https://photos1.iorbix.com/00/00/00/00/02/92/21/54/Natasha-Romanoff-ELdcGJ6c2-b.jpg' }} />
         <View style={styles.body}>
           <View style={styles.bodyContent}>
-            <Text style={styles.name}>Natasha Romanof</Text>
+            {this.state.loading && (<Spinner color="green" />)}
+            <Text style={styles.name}>{this.state.nama}</Text>
             <Text style={styles.info}>Core Developer at PT.Pegadaian Persero</Text>
             <Text style={styles.description}>
               I am a core developer at PT. Pegadaian{"\n"}
@@ -72,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 30,
   },
-  name: { 
+  name: {
     fontSize: 28,
     color: "#696969",
     fontWeight: "600"
