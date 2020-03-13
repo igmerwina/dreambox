@@ -105,14 +105,6 @@ export default class LoginScreen extends Component {
         <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.props.navigation.navigate('Home')} >
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('button works')}>
-          <Text>Forgot your password?</Text>
-        </TouchableOpacity >
-
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => alert('button works')}>
-          <Text>Register</Text>
-        </TouchableOpacity>
       </View>
     );
   }
