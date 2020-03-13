@@ -32,15 +32,16 @@ export default class Home extends Component {
     super(props);
     this.state = {
       data: [
-        { link: "Profile", title: "Profile", color: "#65A898", image: "https://img.icons8.com/color/70/000000/name.png" },
-        { link: "List", title: "Mydream", color: "#65A898", image: "https://img.icons8.com/office/70/000000/home-page.png" },
-        { link: "Input", title: "Add Dream", color: "#65A898", image: "https://img.icons8.com/color/70/000000/classroom.png" },
-        { link: "Simulasi", title: "Simulasi", color: "#65A898", image: "https://img.icons8.com/dusk/70/000000/checklist.png" },
+        { link: "List", title: "My Dreambox", color: "#ededed", image: "https://img.icons8.com/office/70/000000/home-page.png" },
+        { link: "Input", title: "Create Dreambox", color: "#ededed", image: "https://img.icons8.com/color/70/000000/classroom.png" },
+        { link: "Profile", title: "Profile", color: "#ededed", image: "https://img.icons8.com/color/70/000000/name.png" },
+        { link: "Simulasi", title: "Simulation", color: "#ededed", image: "https://img.icons8.com/dusk/70/000000/checklist.png" },
       ]
     };
   }
 
   render() {
+    console.disableYellowBox = true;
     return (
       <View style={styles.container}>
         <FlatList style={styles.list}
@@ -51,7 +52,7 @@ export default class Home extends Component {
           keyExtractor={(item) => {
             return item.id;
           }}
-          renderItem={({ item }) => {
+          renderItem={({ item, key }) => {
             return (
               <View>
                 <TouchableOpacity style={[styles.card, { backgroundColor: item.color }]} onPress={() => { this.props.navigation.navigate(item.link) }}>
@@ -60,7 +61,7 @@ export default class Home extends Component {
 
                 <View style={styles.cardHeader}>
                   <View style={{ alignItems: "center", justifyContent: "center" }}>
-                    <Text style={[styles.title, { color: item.color }]}>{item.title}</Text>
+                    <Text style={[styles.title, styles.textColor]}>{item.title}</Text>
                   </View>
                 </View>
               </View>
@@ -84,21 +85,23 @@ const styles = StyleSheet.create({
   listContainer: {
     alignItems: 'center'
   },
+  textColor: {
+    color: '#51965e'
+  },
   /******** card **************/
   card: {
     shadowColor: '#474747',
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 3,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
 
     elevation: 12,
     marginVertical: 20,
     marginHorizontal: 40,
     backgroundColor: "#e2e2e2",
-    //flexBasis: '42%',
     width: 120,
     height: 120,
     borderRadius: 20,
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     flex: 1,
     alignSelf: 'center',
     fontWeight: 'bold'
