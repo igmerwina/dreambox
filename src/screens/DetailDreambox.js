@@ -60,7 +60,7 @@ export default class DetailDreambox extends Component {
       .then((responseJson) => {
         this.setState({
           loading: false,
-          namaDream: responseJson.data[0].nama,
+          namaDream: responseJson.data[0].kategori,
           urlGambar: responseJson.data[0].url_gambar,
           targetEmas: responseJson.data[0].target_gram,
           progress: responseJson.data[0].progress,
@@ -129,7 +129,7 @@ export default class DetailDreambox extends Component {
                   <Text>Update</Text>
                   <Icon name="ios-swap" />
                 </Button>
-                <Button bordered small danger>
+                <Button bordered small danger onPress={() => this.props.navigation.navigate('Cancel')}>
                   <Text>Delete</Text>
                   <Icon name="ios-trash" />
                 </Button>
