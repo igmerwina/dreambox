@@ -48,7 +48,7 @@ export default class DetailDreambox extends Component {
       cif: '',
 
       idDreambox: 74,
-      totalDana: 100000000 // nanti berubah nunggu API mel
+      totalDana: 0 
     };
     this.setDate = this.setDate.bind(this);
   }
@@ -62,6 +62,7 @@ export default class DetailDreambox extends Component {
       .then((responseJson) => {
         this.setState({
           loading: false,
+          totalDana: responseJson.data[0].target_rupiah,
           namaDream: responseJson.data[0].kategori,
           urlGambar: responseJson.data[0].url_gambar,
           targetEmas: responseJson.data[0].target_gram,
@@ -131,13 +132,13 @@ export default class DetailDreambox extends Component {
                 </Body>
               </CardItem>
               <View style={styles.buttonGroup}>
-                <Button bordered warning small onPress={() => this._setUpdate()}>
+                <Button warning small onPress={() => this._setUpdate()}>
                   <Text>Update</Text>
-                  <Icon name="ios-swap" />
+                  <Icon name="ios-refresh" />
                 </Button>
-                <Button bordered small danger onPress={() => this.props.navigation.navigate('Cancel')}>
-                  <Text>Delete</Text>
-                  <Icon name="ios-trash" />
+                <Button small danger onPress={() => this.props.navigation.navigate('Cancel')}>
+                  <Text>Cancel</Text>
+                  <Icon name="ios-repeat" />
                 </Button>
               </View>
               <View style={styles.paddingTen}>
@@ -287,8 +288,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   buttonGroup: {
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 15,
+    marginRight: 15,
     marginBottom: -7,
     flexDirection: 'row',
     justifyContent: 'space-between',
