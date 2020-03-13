@@ -14,7 +14,8 @@ const radio_props = [
   { label: "Keluarga/Saudara Sakit", value: "Keluarga/Saudara Sakit" },
   { label: "Sedang Tertimpa Musibah", value: "Sedang Tertimpa Musibah" },
   { label: "Perubahan Rencana", value: "Perubahan Rencana" },
-  { label: "Cepat Menikah", value: "Cepat Menikah" }
+  { label: "Cepat Menikah", value: "Cepat Menikah" },
+  { label: "Target Pencairan Telah Tercapai", value: "Target Pencairan Telah Tercapai" }
 ];
 
 export default class CancelDreambox extends Component {
@@ -48,7 +49,7 @@ export default class CancelDreambox extends Component {
         const responseJSON = res.data
 
         if (responseJSON.status != null) {
-          Alert.alert('Info', 'Dream kamu berhasil dibatalkan!');
+          Alert.alert('Sukses', 'Proses berhasil dilakukan');
           this.props.navigation.navigate('Home');
           return;
         }
