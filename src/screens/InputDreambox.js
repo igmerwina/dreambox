@@ -19,7 +19,7 @@ import axios from 'axios';
 import moment from 'moment';
 import Icon from "react-native-vector-icons/Ionicons";
 import { TextInputMask } from "react-native-masked-text";
-import { StyleSheet, TouchableHighlight, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, TouchableHighlight, Image, AsyncStorage, Alert } from 'react-native';
 
 export default class InputDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -36,6 +36,14 @@ export default class InputDreambox extends Component {
     const data = await AsyncStorage.getItem('CIF');
     this.setState({ cif: data })
     console.log('Sukses ambil CIF: ' + data);
+
+    // get harga emas 
+    fetch("http://mydreambox.herokuapp.com/dreambox/hargaemas")
+    .then(response => response.json())
+    .then((responseJson) => {
+      this.setState({ hargaEmas: responseJson.data });
+    })
+    .catch(error => console.log(error))
   };
 
   constructor(props) {
@@ -49,6 +57,7 @@ export default class InputDreambox extends Component {
       konversiEmas: 0,
       index: '',
       totalMonth: 0,
+      hargaEmas: 0,
       loading: false
     };
     this.setDate = this.setDate.bind(this);
@@ -91,7 +100,7 @@ export default class InputDreambox extends Component {
   }
 
   render() {
-    const konvertEmas = Number((this.state.nominal) / 800000).toFixed(2)
+    const konvertEmas = Number((this.state.nominal) / (this.state.hargaEmas * 100)).toFixed(2)
     const autoDebitEmas = Number(konvertEmas/this.state.totalMonth).toFixed(2);
 
     return (
@@ -132,7 +141,7 @@ export default class InputDreambox extends Component {
                 <Label>Target Tercapai</Label>
                 <DatePicker
                   defaultDate={new Date().getDate()}
-                  minimumDate={new Date(2020, 2, 28)}
+                  minimumDate={new Date(2021, 2, 1)}
                   maximumDate={new Date(3000, 12, 31)}
                   locale={"id"}
                   format="YYYY-MM-DD"
@@ -211,6 +220,7 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   notification: {
+    textAlign: 'center',
     alignContent: 'center',
     alignItems: 'center',
     color: '#65A999'
