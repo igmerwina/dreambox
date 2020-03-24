@@ -23,6 +23,7 @@ import moment from 'moment';
 
 export default class DetailDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
     return {
       headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
       headerTitle: <Logo />,
@@ -47,8 +48,10 @@ export default class DetailDreambox extends Component {
       progress: '',
       cif: '',
 
+      flag: '',
+
       idDreambox: 74,
-      totalDana: 0 
+      totalDana: 0,
     };
     this.setDate = this.setDate.bind(this);
   }
@@ -57,7 +60,7 @@ export default class DetailDreambox extends Component {
     const CIF = await AsyncStorage.getItem('CIF');
     this.setState({ loading: true, cif: CIF });
 
-    fetch("http://mydreambox.herokuapp.com/dreambox/detailbyid/74")
+    fetch("http://mydreambox.herokuapp.com/dreambox/detailbyid/75")
       .then(response => response.json())
       .then((responseJson) => {
         this.setState({
@@ -68,6 +71,7 @@ export default class DetailDreambox extends Component {
           targetEmas: responseJson.data[0].target_gram,
           progress: responseJson.data[0].progress,
           tanggalTercapai: responseJson.data[0].target,
+          flag: responseJson.data[0].flag,
         })
       })
       .catch(error => console.log(error))
@@ -98,7 +102,7 @@ export default class DetailDreambox extends Component {
       .then((res) => {
         const responseJSON = res.data
         console.log(responseJSON);
-        if (responseJSON.status != "SUCCESS") {
+        if (responseJSON.status != "SUCCESS") { // khusus buat rekaman. nanti hapus lagi. validasi eror salah soalnya
           this.setState({ loading: false })
           console.log(res.data)
           Alert.alert('Data yang anda masukan salah')
@@ -115,6 +119,8 @@ export default class DetailDreambox extends Component {
   render() {
     const persen = Number(this.state.progress * 100).toFixed(1)
     const progress = Number(this.state.progress)
+    const { item } = this.props.navigation.state.params;
+    console.log(item);
 
     return (
       <Container>
@@ -131,16 +137,18 @@ export default class DetailDreambox extends Component {
                   />
                 </Body>
               </CardItem>
-              <View style={styles.buttonGroup}>
-                <Button warning small onPress={() => this._setUpdate()}>
-                  <Text>Update</Text>
-                  <Icon name="ios-refresh" />
-                </Button>
-                <Button small danger onPress={() => this.props.navigation.navigate('Cancel')}>
-                  <Text>Cancel</Text>
-                  <Icon name="ios-repeat" />
-                </Button>
-              </View>
+              {this.state.flag === 1 && (
+                <View style={styles.buttonGroup}>
+                  <Button warning small onPress={() => this._setUpdate()}>
+                    <Text>Update</Text>
+                    <Icon name="ios-refresh" />
+                  </Button>
+                  <Button small danger onPress={() => this.props.navigation.navigate('Cancel')}>
+                    <Text>Cancel</Text>
+                    <Icon name="ios-repeat" />
+                  </Button>
+                </View>
+              )}
               <View style={styles.paddingTen}>
                 <View style={styles.inputPosition}>
                   <Icon active name='ios-calendar' />
@@ -187,7 +195,7 @@ export default class DetailDreambox extends Component {
                         <Input
                           style={styles.inputDream}
                           underlineColorAndroid="#65A898"
-                          >
+                        >
                           {this.state.totalDana}
                         </Input>
                       )}

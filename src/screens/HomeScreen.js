@@ -35,7 +35,7 @@ export default class Home extends Component {
         { link: "List", title: "My Dreambox", color: "#ededed", image: "https://img.icons8.com/office/70/000000/home-page.png" },
         { link: "Input", title: "Create Dreambox", color: "#ededed", image: "https://img.icons8.com/color/70/000000/classroom.png" },
         { link: "Profile", title: "Profile", color: "#ededed", image: "https://img.icons8.com/color/70/000000/name.png" },
-        { link: "Simulasi", title: "Simulation", color: "#ededed", image: "https://img.icons8.com/dusk/70/000000/checklist.png" },
+        // { link: "Simulasi", title: "Simulation", color: "#ededed", image: "https://img.icons8.com/dusk/70/000000/checklist.png" },
       ]
     };
   }
@@ -44,6 +44,10 @@ export default class Home extends Component {
     console.disableYellowBox = true;
     return (
       <View style={styles.container}>
+        <Image 
+          source={{ uri: 'https://media.mnn.com/assets/images/2018/08/CollectionOfCloudsAgainstABlueSky.jpg.653x0_q80_crop-smart.jpg'}} 
+          style={{ width: 500, height: 200 }}
+        />
         <FlatList style={styles.list}
           contentContainerStyle={styles.listContainer}
           data={this.state.data}
@@ -75,7 +79,6 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
     backgroundColor: '#fff',
   },
   list: {

@@ -39,11 +39,11 @@ export default class InputDreambox extends Component {
 
     // get harga emas 
     fetch("http://mydreambox.herokuapp.com/dreambox/hargaemas")
-    .then(response => response.json())
-    .then((responseJson) => {
-      this.setState({ hargaEmas: responseJson.data });
-    })
-    .catch(error => console.log(error))
+      .then(response => response.json())
+      .then((responseJson) => {
+        this.setState({ hargaEmas: responseJson.data });
+      })
+      .catch(error => console.log(error))
   };
 
   constructor(props) {
@@ -101,7 +101,7 @@ export default class InputDreambox extends Component {
 
   render() {
     const konvertEmas = Number((this.state.nominal) / (this.state.hargaEmas * 100)).toFixed(2)
-    const autoDebitEmas = Number(konvertEmas/this.state.totalMonth).toFixed(2);
+    const autoDebitEmas = Number(konvertEmas / this.state.totalMonth).toFixed(2);
 
     return (
       <Container>
@@ -163,11 +163,15 @@ export default class InputDreambox extends Component {
               </Item>
               <Item stackedLabel>
                 <Label>Tarikan Emas Perbulan</Label>
-                <Text>{autoDebitEmas} gram</Text>
+                {isNaN(autoDebitEmas) ? (
+                  <Text style={{marginTop:4}}>Anda Harus Mengisi Tanggal</Text>
+                ) : (
+                    <Text>{autoDebitEmas}</Text>
+                  )}
               </Item>
               <Item stackedLabel>
                 <Label>Tanggal Debit</Label>
-                <Text>Tanggal 17</Text>
+                <Text>Tanggal 14</Text>
               </Item>
             </Form>
           </Card>
@@ -176,7 +180,7 @@ export default class InputDreambox extends Component {
               <Card>
                 <CardItem footer bordered>
                   <Text style={styles.notification}>
-                    Saldo akan terpotong sebanyak {konvertEmas} gram
+                    Saldo akan terpotong sebanyak: {"\n"}{autoDebitEmas} gram perbulan
                   </Text>
                 </CardItem>
               </Card>
@@ -187,7 +191,7 @@ export default class InputDreambox extends Component {
             <Text style={styles.buttonText}>Simpan</Text>
           </Button>
         </Content>
-      </Container>
+      </Container >
     );
   }
 }
@@ -221,9 +225,6 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   notification: {
-    textAlign: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
     color: '#65A999'
   }
 })
