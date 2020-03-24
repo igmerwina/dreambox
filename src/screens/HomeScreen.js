@@ -9,13 +9,14 @@ import {
   FlatList,
   AsyncStorage,
 } from 'react-native';
-import { MenuButton, Logo } from "../components/header/header";
+import { HomeIcon, Logo } from "../components/header/header";
+import { SliderBox } from "react-native-image-slider-box";
 import Axios from 'axios';
 
 export default class Home extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HomeIcon onPress={() => Alert.alert('Dreambox', 'By Kelompok 1 Sprint')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Home",
       headerLayoutPreset: "center"
@@ -31,18 +32,31 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      images: [
+        "https://i.ytimg.com/vi/GQ6lNsR34kc/maxresdefault.jpg",
+        "https://1.bp.blogspot.com/-fvrPMYeFkMs/XQMWzG8tQmI/AAAAAAAAAQo/7BPYsFTQ2AgfCV57zp1x82u1gROjtt5jwCLcBGAs/s1600/Badai%2BEmas%2BPegadaian.jpg",
+        "http://news.unair.ac.id/wp-content/uploads/2019/05/Pegadaian-Foto.jpg",
+      ],
+
       data: [
-        { link: "Profile", title: "Profile", color: "#65A898", image: "https://img.icons8.com/color/70/000000/name.png" },
-        { link: "List", title: "Mydream", color: "#65A898", image: "https://img.icons8.com/office/70/000000/home-page.png" },
-        { link: "Input", title: "Add Dream", color: "#65A898", image: "https://img.icons8.com/color/70/000000/classroom.png" },
-        { link: "Simulasi", title: "Simulasi", color: "#65A898", image: "https://img.icons8.com/dusk/70/000000/checklist.png" },
+        { link: "List", title: "My Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429836-d62a9800-6e0c-11ea-826f-60a4f7bc6c7d.png" },
+        { link: "PickSimulation", title: "Create Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429262-f60d8c00-6e0b-11ea-9fba-56d99a3ea0f3.png" },
+        { link: "Profile", title: "Profile", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429790-c0b56e00-6e0c-11ea-92d6-6a1baa41ece5.png" },
       ]
     };
   }
 
   render() {
+    console.disableYellowBox = true;
     return (
       <View style={styles.container}>
+        <SliderBox
+          images={this.state.images}
+          dotColor="#ededed"
+          ImageComponentStyle={styles.imageSlider}
+          circleLoop={true}
+          autoplay={true}
+        />
         <FlatList style={styles.list}
           contentContainerStyle={styles.listContainer}
           data={this.state.data}
@@ -51,7 +65,7 @@ export default class Home extends Component {
           keyExtractor={(item) => {
             return item.id;
           }}
-          renderItem={({ item }) => {
+          renderItem={({ item, key }) => {
             return (
               <View>
                 <TouchableOpacity style={[styles.card, { backgroundColor: item.color }]} onPress={() => { this.props.navigation.navigate(item.link) }}>
@@ -60,7 +74,7 @@ export default class Home extends Component {
 
                 <View style={styles.cardHeader}>
                   <View style={{ alignItems: "center", justifyContent: "center" }}>
-                    <Text style={[styles.title, { color: item.color }]}>{item.title}</Text>
+                    <Text style={[styles.title, styles.textColor]}>{item.title}</Text>
                   </View>
                 </View>
               </View>
@@ -74,7 +88,6 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 40,
     backgroundColor: '#fff',
   },
   list: {
@@ -84,21 +97,23 @@ const styles = StyleSheet.create({
   listContainer: {
     alignItems: 'center'
   },
+  textColor: {
+    color: '#51965e'
+  },
   /******** card **************/
   card: {
     shadowColor: '#474747',
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 3,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
 
     elevation: 12,
     marginVertical: 20,
     marginHorizontal: 40,
     backgroundColor: "#e2e2e2",
-    //flexBasis: '42%',
     width: 120,
     height: 120,
     borderRadius: 20,
@@ -128,14 +143,20 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 1,
   },
   cardImage: {
-    height: 50,
-    width: 50,
+    height: 80,
+    width: 80,
     alignSelf: 'center'
   },
   title: {
-    fontSize: 24,
+    marginTop: -20,
+    fontSize: 20,
     flex: 1,
     alignSelf: 'center',
     fontWeight: 'bold'
   },
+  imageSlider: {
+    borderRadius: 5, 
+    width: '98%', 
+    marginTop: 5
+  }
 });      

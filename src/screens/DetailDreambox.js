@@ -1,4 +1,4 @@
-import { StyleSheet, Image, ProgressBarAndroid, Alert } from "react-native";
+import { StyleSheet, Image, ProgressBarAndroid, Alert, AsyncStorage } from "react-native";
 import React, { Component } from "react";
 import { MenuButton, Logo } from "../components/header/header";
 import {
@@ -20,11 +20,12 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import moment from 'moment';
+import { HeaderBackButton } from 'react-navigation';
 
 export default class DetailDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.navigate('List')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Detail",
       headerLayoutPreset: "center"
@@ -45,26 +46,32 @@ export default class DetailDreambox extends Component {
       urlGambar: 'Loading...',
       targetEmas: '',
       progress: '',
+      cif: '',
+
+      flag: '',
 
       idDreambox: 74,
-      totalDana: 100000000 // nanti berubah nunggu API mel
+      totalDana: 0,
     };
     this.setDate = this.setDate.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({ loading: true })
+  async componentDidMount() {
+    const CIF = await AsyncStorage.getItem('CIF');
+    this.setState({ loading: true, cif: CIF });
 
-    fetch("http://mydreambox.herokuapp.com/dreambox/detailbyid/74")
+    fetch("http://mydreambox.herokuapp.com/dreambox/detailbyid/75")
       .then(response => response.json())
       .then((responseJson) => {
         this.setState({
           loading: false,
+          totalDana: responseJson.data[0].target_rupiah,
           namaDream: responseJson.data[0].kategori,
           urlGambar: responseJson.data[0].url_gambar,
           targetEmas: responseJson.data[0].target_gram,
           progress: responseJson.data[0].progress,
           tanggalTercapai: responseJson.data[0].target,
+          flag: responseJson.data[0].flag,
         })
       })
       .catch(error => console.log(error))
@@ -80,18 +87,22 @@ export default class DetailDreambox extends Component {
   }
 
   _simpanUpdate = () => {
-    this.setState({ loading: true })
+    this.setState({ loading: true, update: !this.state.update })
 
     const param = {
+      cif: this.state.cif,
       id_dreambox: this.state.idDreambox,
       dana: this.state.totalDana,
       target: this.state.tanggalTercapai
     };
 
+    console.log(param)
+
     axios.post('http://mydreambox.herokuapp.com/dreambox/update', param)
       .then((res) => {
         const responseJSON = res.data
-        if (responseJSON.status != "SUCCESS") {
+        console.log(responseJSON);
+        if (responseJSON.status != "SUCCESS") { // khusus buat rekaman. nanti hapus lagi. validasi eror salah soalnya
           this.setState({ loading: false })
           console.log(res.data)
           Alert.alert('Data yang anda masukan salah')
@@ -124,16 +135,18 @@ export default class DetailDreambox extends Component {
                   />
                 </Body>
               </CardItem>
-              <View style={styles.buttonGroup}>
-                <Button bordered warning small onPress={() => this._setUpdate()}>
-                  <Text>Update</Text>
-                  <Icon name="ios-swap" />
-                </Button>
-                <Button bordered small danger onPress={() => this.props.navigation.navigate('Cancel')}>
-                  <Text>Delete</Text>
-                  <Icon name="ios-trash" />
-                </Button>
-              </View>
+              {this.state.flag === 1 && (
+                <View style={styles.buttonGroup}>
+                  <Button warning small onPress={() => this._setUpdate()}>
+                    <Text>Update</Text>
+                    <Icon name="ios-refresh" />
+                  </Button>
+                  <Button small danger onPress={() => this.props.navigation.navigate('Cancel')}>
+                    <Text>Cancel</Text>
+                    <Icon name="ios-repeat" />
+                  </Button>
+                </View>
+              )}
               <View style={styles.paddingTen}>
                 <View style={styles.inputPosition}>
                   <Icon active name='ios-calendar' />
@@ -148,7 +161,7 @@ export default class DetailDreambox extends Component {
                       </Input>
                     ) : (
                         <DatePicker
-                          minimumDate={new Date(2025, 1, 1)}
+                          minimumDate={new Date(2021, 0, 1)}
                           maximumDate={new Date(3000, 12, 31)}
                           locale={"id"}
                           underlineColorAndroid="#65A898"
@@ -180,7 +193,7 @@ export default class DetailDreambox extends Component {
                         <Input
                           style={styles.inputDream}
                           underlineColorAndroid="#65A898"
-                          >
+                        >
                           {this.state.totalDana}
                         </Input>
                       )}
@@ -205,7 +218,7 @@ export default class DetailDreambox extends Component {
                   <ProgressBarAndroid
                     styleAttr="Horizontal"
                     indeterminate={false}
-                    progress={0.5}
+                    progress={progress}
                   />
                 </View>
               </ListItem>
@@ -281,8 +294,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   buttonGroup: {
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 15,
+    marginRight: 15,
     marginBottom: -7,
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -2,13 +2,13 @@ import React from "react";
 import { createDrawerNavigator, createAppContainer } from "react-navigation";
 import BottomTabNavigator from "./bottom-tab-navigator";
 import { 
-  SettingsNavigator, 
   InputDreamboxNav, 
   ListDreamboxNav, 
   CancelDreamboxNav, 
   AboutScreenNav, 
   SimulasiNav,
-  DetailDreamboxNav
+  DetailDreamboxNav,
+  PickSimulasiNav
 } 
 from "./screen-stack-navigators";
 import LoginScreen from '../../src/screens/LoginScreen';
@@ -20,13 +20,13 @@ const DrawerNavigator = createDrawerNavigator({
         See 'screen-stack-navigator' file*/
   Login: LoginScreen,
   Home: BottomTabNavigator,
-  Settings: SettingsNavigator,
   List: ListDreamboxNav,
   Input: InputDreamboxNav,
   Cancel: CancelDreamboxNav,
   About: AboutScreenNav,
-  Simulasi: SimulasiNav,
-  Detail: DetailDreamboxNav
+  Simulation: SimulasiNav,
+  Detail: DetailDreamboxNav,
+  PickSimulation: PickSimulasiNav,
 });
 
 const Drawer = createAppContainer(DrawerNavigator);

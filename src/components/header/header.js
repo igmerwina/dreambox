@@ -27,3 +27,11 @@ export class MenuButton extends React.Component {
         );
     }
 }
+
+export class HomeIcon extends React.Component {
+    render() {
+        return (
+            <TouchableOpacity onPress = {this.props.onPress} ><Icon  name = "ios-heart" size={1} style = {{color: 'grey',paddingLeft: 10}}/></TouchableOpacity>
+        );
+    }
+}
