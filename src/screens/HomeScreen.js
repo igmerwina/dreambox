@@ -10,6 +10,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import { MenuButton, Logo } from "../components/header/header";
+import { SliderBox } from "react-native-image-slider-box";
 import Axios from 'axios';
 
 export default class Home extends Component {
@@ -31,11 +32,16 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      images: [
+        "http://news.unair.ac.id/wp-content/uploads/2019/05/Pegadaian-Foto.jpg",
+        "https://i.ytimg.com/vi/GQ6lNsR34kc/maxresdefault.jpg",
+        "https://1.bp.blogspot.com/-fvrPMYeFkMs/XQMWzG8tQmI/AAAAAAAAAQo/7BPYsFTQ2AgfCV57zp1x82u1gROjtt5jwCLcBGAs/s1600/Badai%2BEmas%2BPegadaian.jpg"
+      ],
+
       data: [
-        { link: "List", title: "My Dreambox", color: "#ededed", image: "https://img.icons8.com/office/70/000000/home-page.png" },
-        { link: "Input", title: "Create Dreambox", color: "#ededed", image: "https://img.icons8.com/color/70/000000/classroom.png" },
-        { link: "Profile", title: "Profile", color: "#ededed", image: "https://img.icons8.com/color/70/000000/name.png" },
-        // { link: "Simulasi", title: "Simulation", color: "#ededed", image: "https://img.icons8.com/dusk/70/000000/checklist.png" },
+        { link: "List", title: "My Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429352-1dfcef80-6e0c-11ea-81ef-de8b4de14753.png" },
+        { link: "Input", title: "Create Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429262-f60d8c00-6e0b-11ea-9fba-56d99a3ea0f3.png" },
+        { link: "Profile", title: "Profile", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77428859-594aee80-6e0b-11ea-8571-b9bd8d905eb1.png" },
       ]
     };
   }
@@ -44,9 +50,12 @@ export default class Home extends Component {
     console.disableYellowBox = true;
     return (
       <View style={styles.container}>
-        <Image 
-          source={{ uri: 'https://media.mnn.com/assets/images/2018/08/CollectionOfCloudsAgainstABlueSky.jpg.653x0_q80_crop-smart.jpg'}} 
-          style={{ width: 500, height: 200 }}
+        <SliderBox
+          images={this.state.images}
+          dotColor="#ededed"
+          ImageComponentStyle={styles.imageSlider}
+          circleLoop={true}
+          autoplay={true}
         />
         <FlatList style={styles.list}
           contentContainerStyle={styles.listContainer}
@@ -139,9 +148,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   title: {
+    marginTop: -20,
     fontSize: 20,
     flex: 1,
     alignSelf: 'center',
     fontWeight: 'bold'
   },
+  imageSlider: {
+    borderRadius: 6, width: '96%', marginTop: 5
+  }
 });      
