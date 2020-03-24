@@ -39,9 +39,9 @@ export default class Home extends Component {
       ],
 
       data: [
-        { link: "List", title: "My Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429352-1dfcef80-6e0c-11ea-81ef-de8b4de14753.png" },
+        { link: "List", title: "My Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429836-d62a9800-6e0c-11ea-826f-60a4f7bc6c7d.png" },
         { link: "Input", title: "Create Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429262-f60d8c00-6e0b-11ea-9fba-56d99a3ea0f3.png" },
-        { link: "Profile", title: "Profile", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77428859-594aee80-6e0b-11ea-8571-b9bd8d905eb1.png" },
+        { link: "Profile", title: "Profile", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429790-c0b56e00-6e0c-11ea-92d6-6a1baa41ece5.png" },
       ]
     };
   }
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 1,
   },
   cardImage: {
-    height: 50,
-    width: 50,
+    height: 80,
+    width: 80,
     alignSelf: 'center'
   },
   title: {
