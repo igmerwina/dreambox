@@ -14,11 +14,12 @@ import {
   Left,
   Right
 } from "native-base";
+import { HeaderBackButton } from 'react-navigation';
 
 export default class HistoryScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.navigate('Home')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Search",
       headerLayoutPreset: "center"

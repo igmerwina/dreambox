@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 import { Spinner, Button } from 'native-base';
 import { MenuButton, Logo } from "../components/header/header";
-import { withNavigation } from 'react-navigation';
+import { withNavigation, HeaderBackButton } from 'react-navigation';
 
 class ListDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.navigate('Home')} />,
       headerTitle: <Logo />,
       headerBackTitle: "List",
       headerLayoutPreset: "center"
@@ -56,8 +56,7 @@ class ListDreambox extends Component {
             keyExtractor={(item) => { return item.id_dreambox }}
             renderItem={({ item }) => {
               return (
-                <TouchableOpacity style={styles.card} onPress={() => { 
-                  this.props.navigation.navigate('Detail',{item}) }}>
+                <TouchableOpacity style={styles.card} onPress={() => {this.props.navigation.navigate('Detail') }}>
                   <Image style={styles.image} source={{ uri: item.url_gambar }} />
                   <View style={styles.cardContent}>
                     <Text style={styles.name}>{item.kategori}</Text>

@@ -33,9 +33,9 @@ export default class Home extends Component {
     super(props);
     this.state = {
       images: [
-        "http://news.unair.ac.id/wp-content/uploads/2019/05/Pegadaian-Foto.jpg",
         "https://i.ytimg.com/vi/GQ6lNsR34kc/maxresdefault.jpg",
-        "https://1.bp.blogspot.com/-fvrPMYeFkMs/XQMWzG8tQmI/AAAAAAAAAQo/7BPYsFTQ2AgfCV57zp1x82u1gROjtt5jwCLcBGAs/s1600/Badai%2BEmas%2BPegadaian.jpg"
+        "https://1.bp.blogspot.com/-fvrPMYeFkMs/XQMWzG8tQmI/AAAAAAAAAQo/7BPYsFTQ2AgfCV57zp1x82u1gROjtt5jwCLcBGAs/s1600/Badai%2BEmas%2BPegadaian.jpg",
+        "http://news.unair.ac.id/wp-content/uploads/2019/05/Pegadaian-Foto.jpg",
       ],
 
       data: [
@@ -155,6 +155,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   imageSlider: {
-    borderRadius: 6, width: '96%', marginTop: 5
+    borderRadius: 5, 
+    width: '98%', 
+    marginTop: 5
   }
 });      

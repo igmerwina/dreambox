@@ -20,12 +20,12 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import moment from 'moment';
+import { HeaderBackButton } from 'react-navigation';
 
 export default class DetailDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.navigate('List')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Detail",
       headerLayoutPreset: "center"
@@ -87,7 +87,7 @@ export default class DetailDreambox extends Component {
   }
 
   _simpanUpdate = () => {
-    this.setState({ loading: true })
+    this.setState({ loading: true, update: !this.state.update })
 
     const param = {
       cif: this.state.cif,
@@ -119,8 +119,6 @@ export default class DetailDreambox extends Component {
   render() {
     const persen = Number(this.state.progress * 100).toFixed(1)
     const progress = Number(this.state.progress)
-    const { item } = this.props.navigation.state.params;
-    console.log(item);
 
     return (
       <Container>

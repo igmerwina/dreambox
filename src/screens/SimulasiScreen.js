@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { WebView, StyleSheet, ActivityIndicator, AsyncStorage, Alert } from 'react-native';
 import { MenuButton, Logo } from "../components/header/header";
+import { HeaderBackButton } from 'react-navigation';
 
-export default class SimlasiScreen extends Component {
+export default class SimulasiScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.navigate('PickSimulation')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Input",
       headerLayoutPreset: "center"
@@ -17,8 +18,7 @@ export default class SimlasiScreen extends Component {
 
     this.state = {
       CIF: 1,
-      url: 'http://pegadaian-sprint.herokuapp.com/public/simulasi/nikah',
-      // url: ''
+      url: 'http://pegadaian-sprint.herokuapp.com/public/simulasi/rumah',
     };
   }
 
@@ -38,17 +38,17 @@ export default class SimlasiScreen extends Component {
   }
 
   // -----  ini juga bisa sebenernyaaaa -----
-  // handleWebViewNavigationStateChange = newNavState => {
-  //   const { url } = newNavState;
-  //   if (!url) {
-  //     this.props.navigation.navigate('List')
-  //   };
+  handleWebViewNavigationStateChange = newNavState => {
+    const { url } = newNavState;
+    if (!url) {
+      this.props.navigation.navigate('List')
+    };
 
-  //   if (url.includes('&tab=finished')) {
-  //     this.webview.stopLoading();
-  //     this.props.navigation.navigate('Home')
-  //   }
-  // }
+    if (url.includes('&tab=finished')) {
+      this.webview.stopLoading();
+      this.props.navigation.navigate('List')
+    }
+  }
 
 
   render() {
@@ -63,16 +63,16 @@ export default class SimlasiScreen extends Component {
         source={{ uri: this.state.url }}
         style={{ marginTop: 0 }}
         javaScriptEnabled={true}
-        // domStorageEnabled={true}
+        domStorageEnabled={true}
         renderloading={this.loading}
         startInLoadingState={true}
         ref={(ref) => { this.webview = ref; }}
-        // onNavigationStateChange={(event) => {   ---------- ini bisa brooo :) ---------------
-        //   if (event.url !== this.state.url) {
-        //     this.webview.stopLoading();
-        //     this.props.navigation.navigate('List')
-        //   }
-        // }}
+        onNavigationStateChange={(event) => {   // ---------- ini bisa brooo :) ---------------
+          if (event.url !== this.state.url) {
+            this.webview.stopLoading();
+            this.props.navigation.navigate('List')
+          }
+        }}
         onNavigationStateChange={this.handleWebViewNavigationStateChange}
       />
     );

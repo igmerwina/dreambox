@@ -24,7 +24,7 @@ const DrawerNavigator = createDrawerNavigator({
   Input: InputDreamboxNav,
   Cancel: CancelDreamboxNav,
   About: AboutScreenNav,
-  Simulasi: SimulasiNav,
+  Simulation: SimulasiNav,
   Detail: DetailDreamboxNav,
   PickSimulation: PickSimulasiNav,
 });

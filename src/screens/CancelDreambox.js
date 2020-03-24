@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import { MenuButton, Logo } from "../components/header/header";
 import RadioForm from 'react-native-simple-radio-button';
+import { HeaderBackButton } from 'react-navigation';
 
 const radio_props = [
   { label: "Keluarga/Saudara Sakit", value: "Keluarga/Saudara Sakit" },
@@ -21,7 +22,7 @@ const radio_props = [
 export default class CancelDreambox extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.navigate('Detail')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Cancel",
       headerLayoutPreset: "center"
