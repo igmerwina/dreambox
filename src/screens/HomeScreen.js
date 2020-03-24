@@ -9,14 +9,14 @@ import {
   FlatList,
   AsyncStorage,
 } from 'react-native';
-import { MenuButton, Logo } from "../components/header/header";
+import { HomeIcon, Logo } from "../components/header/header";
 import { SliderBox } from "react-native-image-slider-box";
 import Axios from 'axios';
 
 export default class Home extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <MenuButton onPress={() => navigation.openDrawer()} />,
+      headerLeft: <HomeIcon onPress={() => Alert.alert('Dreambox', 'By Kelompok 1 Sprint')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Home",
       headerLayoutPreset: "center"
@@ -40,7 +40,7 @@ export default class Home extends Component {
 
       data: [
         { link: "List", title: "My Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429836-d62a9800-6e0c-11ea-826f-60a4f7bc6c7d.png" },
-        { link: "Input", title: "Create Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429262-f60d8c00-6e0b-11ea-9fba-56d99a3ea0f3.png" },
+        { link: "PickSimulation", title: "Create Dreambox", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429262-f60d8c00-6e0b-11ea-9fba-56d99a3ea0f3.png" },
         { link: "Profile", title: "Profile", color: "#ededed", image: "https://user-images.githubusercontent.com/8059548/77429790-c0b56e00-6e0c-11ea-92d6-6a1baa41ece5.png" },
       ]
     };

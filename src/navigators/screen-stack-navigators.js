@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation";
 import HomeScreen from "../screens/HomeScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import AboutScreen from "../screens/AboutScreen";
@@ -10,14 +9,11 @@ import InputDreambox from "../screens/InputDreambox";
 import CancelDreambox from "../screens/CancelDreambox";
 import DetailDreambox from "../screens/DetailDreambox";
 import SimulasiScreen from "../screens/SimulasiScreen";
+import PickSimulation from "../screens/PickSimulation";
 
 //Add navigators with screens in this file
 export const HomeNavigator = createStackNavigator({
   Home: { screen: HomeScreen }
-});
-
-export const SettingsNavigator = createStackNavigator({
-  Settings: { screen: SettingsScreen }
 });
 
 export const ProfileNavigator = createStackNavigator({
@@ -50,4 +46,8 @@ export const DetailDreamboxNav = createStackNavigator({
 
 export const SimulasiNav = createStackNavigator({
   Simulasi : { screen: SimulasiScreen }
+})
+
+export const PickSimulasiNav = createStackNavigator({
+  Simulasi : { screen: PickSimulation }
 })

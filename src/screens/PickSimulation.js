@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import { MenuButton, Logo } from "../components/header/header";
 import { HeaderBackButton } from "react-navigation";
 
-export default class SettingsScreen extends React.Component {
+export default class PickSimulation extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <HeaderBackButton onPress={() => navigation.goBack(null)} />,
+      headerLeft: <HeaderBackButton onPress={() => navigation.navigate('Home')} />,
       headerTitle: <Logo />,
       headerBackTitle: "Settings",
       headerLayoutPreset: "center"
@@ -15,7 +15,7 @@ export default class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Hello! Welcome to my settings page</Text>
+        <Text>Pick Simulation</Text>
       </View>
     );
   }
