@@ -1,6 +1,6 @@
 # Dreambox
 
-![Skrinsut Login](https://user-images.githubusercontent.com/8059548/75103018-6a93b600-5627-11ea-987b-a629babeaa8b.png)
+![The App](https://user-images.githubusercontent.com/8059548/77724531-c9cd5780-7025-11ea-8874-d62bb854b659.gif)
 
 Mini Project Sprint Gade 2020
 
